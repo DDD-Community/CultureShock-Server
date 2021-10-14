@@ -37,7 +37,7 @@ dependencies {
     //implementation("org.springframework.boot:spring-boot-starter-cache:2.3.4.RELEASE")
     //implementation("javax.cache:cache-api:1.1.1")
 
-    //implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation ("org.springframework.boot:spring-boot-starter-security")
 
     // jsoup
     implementation("org.jsoup:jsoup:1.13.1")
@@ -55,6 +55,11 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("org.springframework.security:spring-security-test")
+
+    api("com.squareup.retrofit2:retrofit:2.6.0")
+    api("com.squareup.retrofit2:converter-gson:2.6.0")
+    api("io.reactivex.rxjava2:rxjava:2.2.19")
+    api("com.squareup.retrofit2:adapter-rxjava:2.8.1")
 }
 
 tasks.withType<KotlinCompile> {

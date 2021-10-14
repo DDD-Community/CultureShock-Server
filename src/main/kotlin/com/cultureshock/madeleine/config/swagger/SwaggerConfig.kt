@@ -12,12 +12,15 @@ import org.springframework.web.server.WebSession
 import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
-import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.Contact
+import springfox.documentation.service.*
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.swagger.web.ApiKeyVehicle
+import springfox.documentation.swagger.web.SecurityConfiguration
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import java.util.*
+
 
 @Configuration
 @EnableSwagger2
@@ -44,9 +47,11 @@ class SwaggerConfig(
                 ResponseEntity::class.java
             )
             .select()
-            .apis(RequestHandlerSelectors.any())
-            .paths(PathSelectors.any())
+            .apis(RequestHandlerSelectors.basePackage("com.cultureshock.madeleine.rest"))
+            .paths(PathSelectors.ant("/api/**"))
             .build().apiInfo(apiEndPointsInfo())
+            .securityContexts(listOf(securityContext()))
+            .securitySchemes(listOf(apiKey()))
     }
 
     private fun apiEndPointsInfo(): ApiInfo {
@@ -56,7 +61,24 @@ class SwaggerConfig(
             .contact(Contact("ChoiPureum", "https://github.com/choipureum", "pooreumsunny@gmail.com"))
             .version(buildProperties.version)
             .license("MIT License")
-            .licenseUrl("https://.com")
             .build()
     }
+
+    @Bean
+    fun security(): SecurityConfiguration {
+        return SecurityConfiguration(null, null, null, null,
+            "Bearer access_token", ApiKeyVehicle.HEADER, "Authorization", ",")
+    }
+
+    private fun securityContext(): SecurityContext =
+        SecurityContext.builder()
+            .securityReferences(listOf(defaultAuth()))
+            .forPaths(PathSelectors.regex("/*"))
+            .build()
+
+    private fun defaultAuth(): SecurityReference =
+        SecurityReference("Authorization", arrayOf(AuthorizationScope("global", "accessEverything")))
+
+    private fun apiKey(): ApiKey = ApiKey("Authorization", "jwt", "header")
+
 }

@@ -1,11 +1,11 @@
 spring:
   profiles:
-    include: oauth2
+    include: oauth
   jpa:
     show_sql: true
     properties:
       hibernate:
-        ddl-auto: create-drop
+        ddl-auto: create
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
     hikari:
@@ -16,3 +16,14 @@ spring:
       settings:
         web-allow-others: true
       path: /h2-console
+
+kakao:
+  url:
+    auth: https://kauth.kakao.com/
+    api: https://kapi.kakao.com/
+
+
+jwt:
+  secret: luke-local
+  expiration: 1480000
+  header: Authorization
