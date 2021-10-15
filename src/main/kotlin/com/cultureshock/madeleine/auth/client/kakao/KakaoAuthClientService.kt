@@ -14,6 +14,6 @@ interface KakaoAuthClientService {
               @Query("client_id") clientId: String,
               @Query("redirect_uri") redirectUri: String,
               @Query("code") code: String,
-              @Query("client_secret") clientSecret: String?
+              @Query("client_secret") clientSecret: String? = null
     ): Call<KakaoTokenResponse>
 }

@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class KakaoAuthClient(
         @Value("\${kakao.url.auth}") private val kakaoUrl: String,
         @Value("\${kakao.client_id}") private val clientId: String,
-        @Value("\${kakao.client_secret}") private val clientSecret: String
+        @Value("\${kakao.client_secret}") private val clientSecret: String?
 ) : AbstractClient() {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -33,6 +33,6 @@ class KakaoAuthClient(
     }
 
     fun token(redirectUri: String, code: String): Response<KakaoTokenResponse> {
-        return isSuccessful(kakaoAuthClientService.token(clientId = clientId, redirectUri = redirectUri, code = code, clientSecret = clientSecret), "KakaoAuthClientService::token", logger)
+        return isSuccessful(kakaoAuthClientService.token(clientId = clientId, redirectUri = redirectUri, code = code), "KakaoAuthClientService::token", logger)
     }
 }

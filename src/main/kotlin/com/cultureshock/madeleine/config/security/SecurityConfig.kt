@@ -58,7 +58,7 @@ class SecurityConfig(
                 "/api/v1/user/**",
                 "/api/v1/performance/**",
                 "/health",
-
+                "/**",
                 // swagger
                  "/configuration/ui",
                 "/swagger-resources",
@@ -68,7 +68,8 @@ class SecurityConfig(
             )
             .permitAll()
             .anyRequest().authenticated().and().cors()
-
+        http
+            .headers().frameOptions().disable()
         http
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
 
