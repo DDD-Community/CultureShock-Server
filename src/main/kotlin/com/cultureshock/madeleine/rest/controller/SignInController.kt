@@ -56,6 +56,4 @@ class SignInController(
         //회원 정보도 삭제할것
         return response(kakaoAuthService.kakaoSignOut(request))
     }
-
-
 }

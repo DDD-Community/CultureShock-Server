@@ -49,6 +49,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("com.google.apis:google-api-services-people:v1-rev20201013-1.30.10")
+    implementation("junit:junit:4.13.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")

@@ -3,9 +3,10 @@ spring:
     include: oauth
   jpa:
     show_sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-        ddl-auto: create
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
     hikari:

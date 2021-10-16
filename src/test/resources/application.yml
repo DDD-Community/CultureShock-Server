@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    show_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+
+kakao:
+  client_id: test
+  client_secret: test
+  url:
+    auth: https://kauth.kakao.com/
+    api: https://kapi.kakao.com/
+
+
+jwt:
+  expiration: 100
+  header: Authorization
+  secret: test
