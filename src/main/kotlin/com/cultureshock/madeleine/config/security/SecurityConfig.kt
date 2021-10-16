@@ -49,16 +49,15 @@ class SecurityConfig(
         http
             .csrf().disable()
             .formLogin().disable()
+            .httpBasic().disable()
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
             .antMatchers(
-                "/api/v1/user/**",
-                "/api/v1/performance/**",
                 "/health",
-                "/**",
+                "/api/v1/auth/**",
                 // swagger
                  "/configuration/ui",
                 "/swagger-resources",

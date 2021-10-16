@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.auth.client.kakao
 
 import com.cultureshock.madeleine.auth.client.AbstractClient
+import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserLogout
 import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -33,5 +34,10 @@ class KakaoClient(
     fun getUserInfo(token: String): Response<KakaoUserResponse> {
         val accessToken = "Bearer $token"
         return isSuccessful(kakaoClientService.getUserInfo(accessToken), "KakaoClient::getUserInfo", logger)
+    }
+
+    fun signOutKakao(token: String): Response<KakaoUserLogout>{
+        val accessToken = "Bearer $token"
+        return isSuccessful(kakaoClientService.signOut(accessToken),"KakaoClient::logoutUser", logger )
     }
 }

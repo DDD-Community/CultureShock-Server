@@ -59,4 +59,8 @@ data class KakaoUserProfile(
     val profileImageUrl: String
 )
 
+data class KakaoUserLogout(
+    val id: Long
+)
+
 

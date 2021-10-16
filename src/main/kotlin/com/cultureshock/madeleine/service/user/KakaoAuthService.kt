@@ -9,7 +9,9 @@ import com.cultureshock.madeleine.exception.UserApiException
 import com.cultureshock.madeleine.auth.security.JwtTokenUtils
 import com.cultureshock.madeleine.common.util.KakaoAccountUtils
 import com.cultureshock.madeleine.rest.dto.request.SignInRequest
+import com.cultureshock.madeleine.rest.dto.request.SignOutRequest
 import com.cultureshock.madeleine.rest.dto.response.SignInResponse
+import com.cultureshock.madeleine.rest.dto.response.SignOutResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -51,5 +53,17 @@ class KakaoAuthService(
             token = jwtTokenUtils.generateToken(userDetails)
         )
     }
+
+    fun kakaoSignOut(request: SignOutRequest): SignOutResponse {
+        val res = kakaoClient.signOutKakao(request.token)
+        if (!res.isSuccessful) throw UserApiException(ErrorCode.UNAUTHORIZED_KAKAO, "카카오 유저 정보 조회 에러")
+        val kakaoRes = res.body()!!
+
+        return SignOutResponse(
+            id= kakaoRes.id
+        )
+    }
+
+
 
 }

@@ -24,6 +24,5 @@ kakao:
 
 
 jwt:
-  secret: luke-local
   expiration: 1480000
   header: Authorization
