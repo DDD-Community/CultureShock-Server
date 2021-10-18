@@ -1,5 +1,7 @@
 package support
 
+import com.cultureshock.madeleine.auth.security.JwtUser
+import com.cultureshock.madeleine.auth.security.JwtUserFactory
 import com.cultureshock.madeleine.domain.user.Authority
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
@@ -9,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 
 const val NICK_NAME: String = "아무개"
-const val USER_NAME: String = "최푸름"
+const val USER_NAME: String = "아무개"
 const val EMAIL: String = "test@email.com"
 const val PHONE: String = "010-0000-0000"
 
@@ -58,4 +60,8 @@ fun createAuthority(
     return Authority(
         authorityName = authorityName
     )
+}
+
+fun createUserDetails(): UserDetails{
+    return JwtUserFactory.create(createUser())
 }

@@ -37,7 +37,7 @@ class HealthControllerTest{
 
     @Test
     @Throws(Exception::class)
-    fun `Health_Check_Test`(){
+    fun `서버 체크를 한다`(){
         this.mvc!!
             .perform(get("/health").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)

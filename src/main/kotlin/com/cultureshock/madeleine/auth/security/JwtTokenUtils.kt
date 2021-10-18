@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.auth.security
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
@@ -83,10 +84,16 @@ class JwtTokenUtils(
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
-        val user = userDetails as JwtUser
-        val username = getUsernameFromToken(token)
-        val created = getIssuedAtDateFromToken(token)
-        return username == user.username && !isTokenExpired(token)
+        return try{
+            val user = userDetails as JwtUser
+            val username = getUsernameFromToken(token)
+            val created = getIssuedAtDateFromToken(token)
+            username == user.username && !isTokenExpired(token)
+        } catch (e: JwtException) {
+            false
+        } catch (e: IllegalArgumentException) {
+            false
+        }
     }
 
     private fun calculateExpirationDate(createdDate: Date): Date? {
