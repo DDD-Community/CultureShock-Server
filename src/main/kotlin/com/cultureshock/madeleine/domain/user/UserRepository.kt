@@ -14,4 +14,8 @@ interface UserRepository : JpaRepository<User,Long> {
     fun findByProviderIdAndSocialTypeAndActive(providerId: String, socialType: SocialType, active: Boolean = true): User?
 
     fun findByUsernameAndActive(username: String, active: Boolean = true): User?
+
+    fun findByEmail(email: String): User?
+
+    fun findByUsername(username: String): MutableIterable<List<User>>?
 }
