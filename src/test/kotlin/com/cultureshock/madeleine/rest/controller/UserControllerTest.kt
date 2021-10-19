@@ -71,7 +71,7 @@ class UserControllerTest(
             .alwaysDo<DefaultMockMvcBuilder>(MockMvcResultHandlers.print())
             .build()
     }
-    
+
     /*
     @Test
     @WithMockUser
