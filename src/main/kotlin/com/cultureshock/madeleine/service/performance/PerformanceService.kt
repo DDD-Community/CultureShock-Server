@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,11 +24,27 @@ class PerformanceService(
     /**
      * @title 공연중(prfstate)인 공연 목록
      * @param Pageable
-     * @return Page<Performance>
+     * @return PerformanceListResponse() -> totalCount, totalPage, list
      */
-    fun findAllByPrfstate(pageable: Pageable): PerformanceListResponse {
-        var performance: MutableList<Performance>  = performanceRepository.findAllByPrfstateOrderByPrfpdfrom("공연중",pageable).content
-        return PerformanceListResponse.of(performance);
+    fun findAllByPrfstate(pageable: Pageable, prfstate: String): PerformanceListResponse {
+        val performance: MutableList<Performance> =
+            performanceRepository.findAllByPrfstateOrderByPrfpdfrom(prfstate,pageable).content
+        val totalCount: Long = performanceRepository.findAllByPrfstateOrderByPrfpdfrom(prfstate,pageable).totalElements
+        val totalPages: Int = performanceRepository.findAllByPrfstateOrderByPrfpdfrom(prfstate,pageable).totalPages
+        return PerformanceListResponse.of(performance, totalCount, totalPages)
+    }
+
+    /**
+     * @title 공연상태 & 키워드로 매핑된 공연 목록
+     * @param Pageable
+     * @return PerformanceListResponse() -> totalCount, totalPage, list
+     */
+    fun findAllByGenrenmAndPrfstate(genrenm: String, prfstate: String, ageable: Pageable): PerformanceListResponse{
+        val performance: MutableList<Performance> =
+            performanceRepository.findAllByGenrenmAndPrfstate(genrenm,prfstate,ageable).content
+        val totalCount: Long = performanceRepository.findAllByGenrenmAndPrfstate(genrenm,prfstate,ageable).totalElements
+        val totalPages: Int = performanceRepository.findAllByGenrenmAndPrfstate(genrenm,prfstate,ageable).totalPages
+        return PerformanceListResponse.of(performance, totalCount, totalPages)
     }
 
     /**
@@ -37,7 +54,7 @@ class PerformanceService(
      * @exception ArguExistPerformanceException(400,"매칭되는 공연 ID가 없습니다")
      */
     fun findByMt20id(mt20id: String): PerformanceDetailResponse {
-        val performance = performanceDetailRepository.findByMt20id(mt20id)?:throw ArguExistPerformanceException();
+        val performance = performanceDetailRepository.findByMt20id(mt20id)?:throw ArguExistPerformanceException()
         return PerformanceDetailResponse.of(performance)
     }
 }

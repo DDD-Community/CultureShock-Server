@@ -9,7 +9,6 @@ import com.cultureshock.madeleine.domain.user.enum.Sex
 import com.cultureshock.madeleine.domain.user.enum.SocialType
 import org.springframework.security.core.userdetails.UserDetails
 
-
 const val NICK_NAME: String = "아무개"
 const val USER_NAME: String = "아무개"
 const val EMAIL: String = "test@email.com"

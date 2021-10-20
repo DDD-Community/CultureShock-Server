@@ -20,7 +20,7 @@ class PerformanceController(
 ): RestSupport() {
     @GetMapping("/list",produces = ["application/json"])
     @ApiOperation(value="공연 정보 조회", notes="공연 정보 조회 paging, order by 공연최신순, 공연중 only")
-    fun getAll(user: AuthenticatedUser, @RequestParam pageable: Pageable): ResponseEntity<Any> {
-        return response(performanceService.findAllByPrfstate(pageable));
+    fun getAll(user: AuthenticatedUser, @RequestParam pageable: Pageable, @RequestParam prfstate: String): ResponseEntity<Any> {
+        return response(performanceService.findAllByPrfstate(pageable,prfstate = prfstate));
     }
 }

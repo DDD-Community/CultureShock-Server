@@ -4,6 +4,10 @@ import com.cultureshock.madeleine.domain.AbstractBaseAuditEntity
 import com.cultureshock.madeleine.domain.user.Authority
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
+import org.hibernate.bytecode.enhance.internal.javassist.PersistentAttributesHelper
+import org.springframework.data.mapping.model.MutablePersistentEntity
+import java.io.Serializable
+import java.time.LocalDate
 
 import java.util.*
 import javax.persistence.*
@@ -13,7 +17,7 @@ import javax.persistence.*
 class Performance (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = -1, //seq
+        val id: Long, //seq
 
         @Column(nullable= false)
         val mt20id: String,  //공연ID
@@ -22,10 +26,10 @@ class Performance (
         val prfnm: String,  //공연명
 
         @Column(nullable = false)
-        val prfpdfrom: Date,  //공연 시작일
+        val prfpdfrom: LocalDate,  //공연 시작일
 
         @Column(nullable = false)
-        val prfpdto: Date,  //공연 종료일
+        val prfpdto: LocalDate,  //공연 종료일
 
         @Column(nullable = false)
         val fcltynm: String,  //공연 시설명
@@ -33,7 +37,7 @@ class Performance (
         val poster: String,  //포스터이미지 URL
 
         @Column(nullable = false)
-        var prfstate: Char,  // 공연 상태 (1. 공연중 )
+        var prfstate: String,  // 공연 상태 (1. 공연예정, 2.공연 중, 3.공연 완료)
 
         val genrenm: String  //공연 장르 명(ex. 연극)
 
@@ -44,27 +48,27 @@ class Performance (
 class PerformanceDetail(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = -1, //seq
+        val id: Long ,//seq
 
         @Column(nullable= false)
         val mt20id: String,      //공연ID
 
-        @Column(nullable= false)
+        @Column(name="mt10id", nullable= false)
         val mt10id: String,      //공연시설ID
 
         @Column(nullable= false)
         val prfnm: String,       //공연명
 
         @Column(nullable= false)
-        val prfpdfrom: Date,     //공연시작일
+        val prfpdfrom: LocalDate,     //공연시작일
 
         @Column(nullable= false)
-        val prfpdto: Date,       //공연종료일
+        val prfpdto: LocalDate,       //공연종료일
 
-        val fcltynm: String?,    //공연시설명(공연장명)
-        val prfcast: String?,    //공연출연진
-        val prfcrew: String?,    //공연제작진
-        val prfruntime: String?, //공연런타임
+        val fcltynm: String? =null,    //공연시설명(공연장명)
+        val prfcast: String? =null,    //공연출연진
+        val prfcrew: String? =null,    //공연제작진
+        val prfruntime: String? = null, //공연런타임
 
         var prfage: String = "전체이용가",//공연 관람 연령
         var entrpsnm: String? = null,   //제작사
@@ -85,7 +89,11 @@ class PerformanceDetail(
         val styurl_3: String? = null, // 소개이미지목록3
         val styurl_4: String? = null, // 소개이미지목록4
 
-        var dtguidance: String?   //공연시간
+        var dtguidance: String? =null,   //공연시간
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "l_mt10id", referencedColumnName = "mt10id")
+        val locationDetails : LocationDetail? = null//위치
 
 ): AbstractBaseAuditEntity()
 
@@ -94,9 +102,9 @@ class PerformanceDetail(
 class LocationDetail(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = -1,
+        val lid: Long,
 
-        @Column(nullable = false)
+        @Column(name="mt10id", nullable = false)
         val mt10id: String,              //공연시설ID
 
         @Column(nullable = false)
@@ -110,6 +118,9 @@ class LocationDetail(
         var relateurl: String? = null,   //홈페이지
         var adres: String? = null,       //주소
         var la: Double? = null,          //위도
-        var lo: Double? = null           //경도
+        var lo: Double? = null,           //경도
 
-): AbstractBaseAuditEntity()
+        @OneToMany(fetch = FetchType.LAZY, mappedBy = "locationDetails")
+        val performanceDetail: Set<PerformanceDetail>? = mutableSetOf()
+
+): Serializable, AbstractBaseAuditEntity()

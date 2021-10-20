@@ -3,17 +3,17 @@ package com.cultureshock.madeleine.rest.dto.response.performance
 import com.cultureshock.madeleine.domain.performance.LocationDetail
 import com.cultureshock.madeleine.domain.performance.Performance
 import com.cultureshock.madeleine.domain.performance.PerformanceDetail
-import java.util.*
+import java.time.LocalDate
 
 data class PerformanceResponse (
     val id: Long,
     val mt20id: String,
     val prfnm: String,
-    val prfpdfrom: Date,
-    val prfpdto: Date,
+    val prfpdfrom: LocalDate,
+    val prfpdto: LocalDate,
     val fcltynm: String,
     val poster: String,
-    var prfstate: Char,
+    var prfstate: String,
     val genrenm: String,
 ) {
     companion object {
@@ -34,11 +34,15 @@ data class PerformanceResponse (
 }
 
 data class PerformanceListResponse (
+    val totalCount: Long,
+    val totalPages: Int,
     val performanceList: MutableList<Performance>
 ){
     companion object{
-        fun of(performanceList: MutableList<Performance>): PerformanceListResponse{
+        fun of(performanceList: MutableList<Performance>, totalCount: Long, totalPages: Int ): PerformanceListResponse{
             return PerformanceListResponse(
+                totalCount = totalCount,
+                totalPages = totalPages,
                 performanceList = performanceList
             )
         }
@@ -50,8 +54,8 @@ data class PerformanceDetailResponse (
     val mt20id: String,      //공연ID
     val mt10id: String,      //공연시설ID
     val prfnm: String,       //공연명
-    val prfpdfrom: Date,     //공연시작일
-    val prfpdto: Date,       //공연종료일
+    val prfpdfrom: LocalDate,     //공연시작일
+    val prfpdto: LocalDate,       //공연종료일
     val fcltynm: String?,    //공연시설명(공연장명)
     val prfcast: String?,    //공연출연진
     val prfcrew: String?,    //공연제작진
@@ -118,7 +122,7 @@ data class LocationDetailResponse (
     companion object {
         fun of(locationDetail: LocationDetail): LocationDetailResponse {
             return LocationDetailResponse(
-                id = locationDetail.id,
+                id = locationDetail.lid,
                 mt10id = locationDetail.mt10id,
                 fcltynm = locationDetail.fcltynm,
                 mt13cnt = locationDetail.mt13cnt,

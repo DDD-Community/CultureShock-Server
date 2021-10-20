@@ -11,10 +11,12 @@ import org.springframework.stereotype.Repository
 interface PerformanceRepository : JpaRepository<Performance,Long>{
 
     override fun findAll(pageable: Pageable): Page<Performance>
-    fun findAllByPrfstateOrderByPrfpdfrom(prfstate:String, pageable: Pageable): Page<Performance>
 
-    @Query("select a from Performance a where a.genrenm like %:keyword% and a.prfstate like %:공연중% ORDER BY a.prfpdfrom DESC")
-    fun findAllByGenrenmAndPrfstate(@Param("keyword") keyword: String): List<Performance>
+    fun findAllByPrfstateOrderByPrfpdfrom(prfstate:String, pageable: Pageable): Page<Performance>
+    fun findAllByPrfstate(prfstate:String): List<Performance>?
+
+    @Query("select a from Performance a where a.genrenm like %:genrenm% and a.prfstate like %:prfstate% ORDER BY a.prfpdfrom DESC")
+    fun findAllByGenrenmAndPrfstate(@Param("genrenm") genrenm: String, @Param("prfstate") prfstate: String, pageable: Pageable): Page<Performance>
 }
 
 @Repository
@@ -24,5 +26,5 @@ interface PerformanceDetailRepository : JpaRepository<PerformanceDetail, Long>{
 
 @Repository
 interface LocationDetailRepository : JpaRepository<LocationDetail, Long>{
-
+    fun findByMt10id(mt10id: String) : LocationDetail?
 }
