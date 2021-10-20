@@ -55,6 +55,7 @@ class PerformanceService(
      */
     fun findByMt20id(mt20id: String): PerformanceDetailResponse {
         val performance = performanceDetailRepository.findByMt20id(mt20id)?:throw ArguExistPerformanceException()
-        return PerformanceDetailResponse.of(performance)
+        val location = locationDetailRepository.findByMt10id(performance.mt10id)
+        return PerformanceDetailResponse.of(performance, location)
     }
 }

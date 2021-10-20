@@ -1,14 +1,10 @@
 package com.cultureshock.madeleine.service
 
-import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserResponse
-import com.cultureshock.madeleine.common.util.paging
 import com.cultureshock.madeleine.domain.performance.LocationDetailRepository
 import com.cultureshock.madeleine.domain.performance.Performance
 import com.cultureshock.madeleine.domain.performance.PerformanceDetailRepository
 import com.cultureshock.madeleine.domain.performance.PerformanceRepository
-import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceDetailResponse
-import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceListResponse
 import com.cultureshock.madeleine.service.performance.PerformanceService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -19,7 +15,7 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import support.*
-import java.time.LocalDate
+
 
 @UnitTest
 internal class PerformanceServiceTest {
@@ -73,8 +69,6 @@ internal class PerformanceServiceTest {
 
         //when
         every{ performanceRepository.findAllByGenrenmAndPrfstate("오페라","공연중",pageable) } answers { page }
-
-        //when
         val response = performanceService.findAllByGenrenmAndPrfstate("오페라","공연중", pageable)
 
         //then
@@ -88,11 +82,17 @@ internal class PerformanceServiceTest {
 
     @Test
     fun `공연 ID로 공연 상세를 불러온다`(){
+        //when
+        every{ performanceDetailRepository.findByMt20id(any())} answers { createPerformanceDetails()[2] }
+        every{ locationDetailRepository.findByMt10id(any())} answers { createLocationDetail()[2] }
+        val response : PerformanceDetailResponse = performanceService.findByMt20id("FC001808")
 
+        //then
+        assertAll(
+            { Assertions.assertThat(response.genrenm).isEqualTo("오페라") },
+            { Assertions.assertThat(response.prfruntime).isEqualTo("1시간 30분") },
+            { Assertions.assertThat(response.locationDetailResponse?.telno).isEqualTo("010-4947-7748") },
+            { Assertions.assertThat(response.locationDetailResponse?.adres).isEqualTo("서울특별시 송파구 위례성대로 18 금복빌딩 B1층 아트홀제이") }
+        )
     }
-
-
-
-
-
 }

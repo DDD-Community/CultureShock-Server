@@ -58,6 +58,8 @@ class SecurityConfig(
             .antMatchers(
                 "/health",
                 "/api/v1/auth/**",
+                "/api/v1/performance/list",
+                "/api/v1/performance/list/genrenm",
                 // swagger
                  "/configuration/ui",
                 "/swagger-resources",

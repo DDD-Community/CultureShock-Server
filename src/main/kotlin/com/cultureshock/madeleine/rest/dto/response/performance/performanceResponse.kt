@@ -72,10 +72,11 @@ data class PerformanceDetailResponse (
     val styurl_2: String?, // 소개이미지목록2
     val styurl_3: String?, // 소개이미지목록3
     val styurl_4: String?, // 소개이미지목록4
-    var dtguidance: String?   //공연시간
+    var dtguidance: String?,   //공연시간
+    var locationDetailResponse: LocationDetailResponse?             //경도
 ) {
     companion object {
-        fun of(performanceDetail: PerformanceDetail): PerformanceDetailResponse {
+        fun of(performanceDetail: PerformanceDetail, locationDetail: LocationDetail?): PerformanceDetailResponse {
             return PerformanceDetailResponse(
                 id = performanceDetail.id,
                 mt20id = performanceDetail.mt20id,
@@ -99,7 +100,8 @@ data class PerformanceDetailResponse (
                 styurl_2 = performanceDetail.styurl_2,
                 styurl_3 = performanceDetail.styurl_3,
                 styurl_4 = performanceDetail.styurl_4,
-                dtguidance = performanceDetail.dtguidance   //공연시간
+                dtguidance = performanceDetail.dtguidance,
+                locationDetailResponse = locationDetail?.let { LocationDetailResponse.of(it) }
             )
         }
     }

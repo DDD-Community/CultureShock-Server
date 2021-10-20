@@ -6,6 +6,7 @@ import com.cultureshock.madeleine.domain.user.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
@@ -44,6 +45,9 @@ class WebMvcSupportConfig(
     }
 
     override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver>) {
+        //jwt token
         argumentResolvers.add(AuthenticationTokenResolver(header, jwtTokenUtils, userRepository))
+        // pageable handelr
+        argumentResolvers.add(PageableHandlerMethodArgumentResolver())
     }
 }
