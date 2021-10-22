@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.config.web
 
 import com.cultureshock.madeleine.auth.security.JwtTokenUtils
+import com.cultureshock.madeleine.config.web.resolver.AuthenticationIdResolver
 import com.cultureshock.madeleine.config.web.resolver.AuthenticationTokenResolver
 import com.cultureshock.madeleine.domain.user.UserRepository
 import org.springframework.beans.factory.annotation.Value
@@ -46,7 +47,8 @@ class WebMvcSupportConfig(
 
     override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver>) {
         //jwt token
-        argumentResolvers.add(AuthenticationTokenResolver(header, jwtTokenUtils, userRepository))
+        //argumentResolvers.add(AuthenticationTokenResolver(header, jwtTokenUtils, userRepository))
+        argumentResolvers.add(AuthenticationIdResolver(userRepository))
         // pageable handelr
         argumentResolvers.add(PageableHandlerMethodArgumentResolver())
     }

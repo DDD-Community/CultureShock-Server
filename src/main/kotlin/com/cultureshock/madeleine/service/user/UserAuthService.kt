@@ -2,24 +2,42 @@ package com.cultureshock.madeleine.service.user
 
 import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserResponse
 import com.cultureshock.madeleine.common.util.KakaoAccountUtils
-import com.cultureshock.madeleine.domain.user.AuthorityRepository
-import com.cultureshock.madeleine.domain.user.User
-import com.cultureshock.madeleine.domain.user.UserRepository
+import com.cultureshock.madeleine.domain.user.*
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
 import com.cultureshock.madeleine.domain.user.enum.SocialType
+import com.cultureshock.madeleine.rest.dto.response.UserResponse
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import retrofit2.Response
 
 @Service
 class UserAuthService(
     private val userRepository: UserRepository,
+    private val kakaoUserRepository: KakaoUserRepository,
     private val authorityRepository: AuthorityRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
 
-    fun kakaoJoin(response: KakaoUserResponse): User {
+    fun joinUser(response: UserResponse) : User{
         return createUser(
+            response.nickname,
+            response.email
+        )
+    }
+
+    @Transactional
+    fun createUser(nickname: String, email: String): User{
+
+        val user = User(
+            email = email,
+            nickname = nickname
+        )
+        return userRepository.save(user)
+    }
+
+    fun kakaoJoin(response: KakaoUserResponse): KakaoUser {
+        return createUser_v1(
             providerId = response.id,
             email = response.kakaoAccount.email,
             nickname = response.properties.nickname,
@@ -28,12 +46,11 @@ class UserAuthService(
         )
     }
 
-
     @Transactional
-    fun createUser(providerId: Long, email: String, profileImage: String, nickname: String, socialType: SocialType): User {
+    fun createUser_v1(providerId: Long, email: String, profileImage: String, nickname: String, socialType: SocialType): KakaoUser {
         val authorities = authorityRepository.findByAuthorityName(AuthorityName.ROLE_LEVEL0)
 
-        val user = User(
+        val user = KakaoUser(
             providerId = providerId.toString(),
             email = email,
             username = KakaoAccountUtils.getUsernameByKakaoAccount(providerId),
@@ -44,6 +61,6 @@ class UserAuthService(
             authorities = listOf(authorities)
         )
 
-        return userRepository.save(user)
+        return kakaoUserRepository.save(user)
     }
 }

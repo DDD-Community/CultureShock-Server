@@ -13,6 +13,20 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = -1,
 
+    var nickname: String,
+
+    val email: String,
+
+) : AbstractBaseAuditEntity()
+
+
+@Entity
+@Table(name="kakao_user")
+class KakaoUser(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = -1,
+
     @Column(name = "social_type")
     @Enumerated(value = EnumType.STRING)
     val socialType: SocialType,
@@ -50,5 +64,4 @@ class User(
         inverseJoinColumns = [JoinColumn(name = "authority_id", referencedColumnName = "id")]
     )
     var authorities: List<Authority> = mutableListOf()
-
 ) : AbstractBaseAuditEntity()

@@ -1,13 +1,14 @@
 package com.cultureshock.madeleine.service
 
-import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserResponse
-import com.cultureshock.madeleine.auth.security.JwtTokenUtils
 import com.cultureshock.madeleine.domain.user.AuthorityRepository
 import com.cultureshock.madeleine.domain.user.KakaoUserRepository
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
+import com.cultureshock.madeleine.rest.dto.request.SignInRequest
+import com.cultureshock.madeleine.rest.dto.response.SignInResponse
 import com.cultureshock.madeleine.rest.dto.response.UserResponse
+import com.cultureshock.madeleine.service.user.KakaoAuthService
 import com.cultureshock.madeleine.service.user.UserAuthService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -20,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import support.*
 
 @UnitTest
-internal class UserAuthServiceTest {
+internal class KakaoAuthServiceTest {
     @MockK
     private lateinit var userRepository: UserRepository
 
@@ -32,28 +33,30 @@ internal class UserAuthServiceTest {
 
     private lateinit var passwordEncoder: PasswordEncoder
     private lateinit var userAuthService: UserAuthService
+    private lateinit var kakaoAuthService: KakaoAuthService
 
     @BeforeEach
     internal fun setUp() {
-        every { authorityRepository.findByAuthorityName(AuthorityName.ROLE_LEVEL0)} returns createAuthority()
+        every { userRepository.findByEmail(any()) } answers  { createUser()}
         passwordEncoder = createPasswordEncoder()
         userAuthService = UserAuthService(userRepository = userRepository, authorityRepository = authorityRepository, passwordEncoder = passwordEncoder, kakaoUserRepository = kakaoUserRepository)
+        kakaoAuthService = KakaoAuthService(userAuthService = userAuthService, userRepository = userRepository)
     }
-    
-    @DisplayName("로그인")
+
+    @DisplayName("인증 후 회원가입")
     @Nested
-    inner class GenerateToken{
+    inner class GenerateToken {
         private lateinit var response: UserResponse
 
-        fun subject(): User {
+        fun subject(): SignInResponse {
             every{ userRepository.save(any())} answers { createUser() }
-            return userAuthService.joinUser(response)
+            return kakaoAuthService.kakaoSignIn(createSignInRequest())
         }
 
         @Test
-        fun `인증에 성공하면 회원가입 DB에 저장한다`() {
+        fun `회원가입을 진행한다`() {
             response = createUserResponse()
-            Assertions.assertThat(subject().email).isEqualTo(response.email)
+            Assertions.assertThat(subject().user_id).isEqualTo(response.id)
         }
 
     }

@@ -1,21 +1,21 @@
 package com.cultureshock.madeleine.config.web.resolver
 
-import com.cultureshock.madeleine.auth.security.JwtTokenUtils
 import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser
-import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser_v1
-import com.cultureshock.madeleine.domain.user.KakaoUserRepository
+import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
+import com.cultureshock.madeleine.exception.ApiNotFoundUserException
+import com.cultureshock.madeleine.exception.ApiUnauthrizedException
+import com.cultureshock.madeleine.exception.ArguExistPerformanceException
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
+import javax.servlet.http.HttpServletRequest
 
-class AuthenticationTokenResolver(
-    private val header: String,
-    private val jwtTokenUtils: JwtTokenUtils,
-    private val userRepository: UserRepository,
-    private val kakaoUserRepository: KakaoUserRepository
+
+class AuthenticationIdResolver(
+    private val userRepository: UserRepository
 ): HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
@@ -23,14 +23,15 @@ class AuthenticationTokenResolver(
     }
 
     override fun resolveArgument(parameter: MethodParameter, mavContainer: ModelAndViewContainer?, webRequest: NativeWebRequest, binderFactory: WebDataBinderFactory?): Any? {
-        val token = webRequest.getToken()
-        val username = jwtTokenUtils.getUsernameFromToken(token) ?: return null
-        val user = kakaoUserRepository.findByUsernameAndActive(username) ?: return null
+        val request: HttpServletRequest = webRequest.getNativeRequest() as HttpServletRequest
+        val user: User
+        try {
+            val requestHeader: Long= request.getHeader("user_id").toLong()
+            user = userRepository.findById(requestHeader).get()
+        } catch (e: Exception){
+            throw ApiUnauthrizedException()
+        }
 
-        return AuthenticatedUser_v1(uid = user.id, username = user.username, token = token)
-    }
-
-    private fun NativeWebRequest.getToken(): String {
-        return getHeader(header)?.substring(7) ?: ""
+        return AuthenticatedUser(id = user.id, nickname = user.nickname, email = user.email)
     }
 }

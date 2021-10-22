@@ -1,26 +1,25 @@
-
 package com.cultureshock.madeleine.domain.repository
+
 
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
 import com.cultureshock.madeleine.domain.user.enum.SocialType
 import com.cultureshock.madeleine.rest.controller.SignInController
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.api.assertAll
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import support.RepositoryTest
+import java.util.*
 
 @RepositoryTest
 class UserRepositoryTest @Autowired constructor(
     val userRepository: UserRepository
-){
+) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(SignInController::class.java)
     }
@@ -32,37 +31,13 @@ class UserRepositoryTest @Autowired constructor(
 
         var users = listOf(
             User(
-                socialType = SocialType.KAKAO
-                , active = true
-                , nickname = "아무개1"
-                , username = "아무개1"
-                , password = "abc123"
-                , profileImage = "http://test.com"
-                , providerId = "1"
-                , birthday = "2000-01-01"
-                , email = "a@kakao.com"
+                id= 1L, nickname = "아무개1", email = "a@kakao.com"
             ),
             User(
-                socialType = SocialType.KAKAO
-                , active = true
-                , nickname = "아무개2"
-                , username = "아무개2"
-                , password = "abc123"
-                , profileImage = "http://test.com"
-                , providerId = "2"
-                , birthday = "2000-01-01"
-                , email = "b@kakao.com"
+                id= 2L, nickname = "아무개2", email = "b@kakao.com"
             ),
             User(
-                socialType = SocialType.KAKAO
-                , active = false
-                , nickname = "아무개3"
-                , username = "아무개2"
-                , password = "abc123"
-                , profileImage = "http://test.com"
-                , providerId = "3"
-                , birthday = "2000-01-01"
-                , email = "c@kakao.com"
+                id= 3L, nickname = "아무개3", email = "c@kakao.com"
             )
         )
         userRepository.saveAll(users)
@@ -76,33 +51,19 @@ class UserRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `활동중인 유저들 중 이메일이 일치하는 사용자를 조회한다`() {
-        assertThat(userRepository.findByEmailAndActive("b@kakao.com", true)!!.username).isEqualTo("아무개2")
+    fun `유저들 중 PK ID가 일치하는 사용자를 조회한다`() {
+        assertAll(
+            { Assertions.assertThat(userRepository.findById(1L)!!.get().nickname).isEqualTo("아무개1") },
+            { Assertions.assertThat(userRepository.findById(2L)!!.get().email).isEqualTo("b@kakao.com") }
+        )
     }
 
     @Test
-    fun `활동안하는 중인 유저들 중 이메일,KAKAO 로그인이 일치하는 사용자를 조회한다`() {
-        assertThat(userRepository.findByEmailAndSocialTypeAndActive("c@kakao.com", SocialType.KAKAO, false)!!.nickname).isEqualTo("아무개3")
+    fun `유저들 중 email 이 일치하는 사용자를 조회한다`() {
+        assertAll(
+            { Assertions.assertThat(userRepository.findByEmail("a@kakao.com")!!.nickname).isEqualTo("아무개1") },
+            { Assertions.assertThat(userRepository.findByEmail("c@kakao.com")!!.nickname).isEqualTo("아무개3") }
+        )
     }
 
-    @Test
-    fun `활동중인 유저들 중 ProviderID,KAKAO 로그인이 일치하는 사용자를 조회한다`() {
-        assertThat(userRepository.findByProviderIdAndSocialTypeAndActive("2", SocialType.KAKAO, true)!!.email).isEqualTo("b@kakao.com")
-    }
-
-    @ParameterizedTest
-    @CsvSource("아무개2,2","아무개1,1")
-    fun `활동중인 유저들 중 사용자이름이 일치하는 사용자를 모두 조회한다`(username: String, expectedSize: Int) {
-        val result = userRepository.findByUsername(username)
-        assertThat(result).hasSize(expectedSize)
-    }
-
-    @Test
-    fun `이메일이 일치하는 사용자가 없을 때, null을 반환한다`() {
-        assertThat( userRepository.findByEmail("notexist@email.com")).isNull()
-    }
 }
-
-
-
-

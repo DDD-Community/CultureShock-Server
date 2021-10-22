@@ -24,6 +24,6 @@ class JwtAuthenticationEntryPoint: RestSupport(), AuthenticationEntryPoint {
         response.characterEncoding = StandardCharsets.UTF_8.name()
         response.writer.write(Gson().toJson(result.body))
 
-        logger.error("Exception: $authException")
+        //logger.error("Exception: $authException")
     }
 }

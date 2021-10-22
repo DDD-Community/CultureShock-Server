@@ -16,5 +16,5 @@ class Authority(
     val authorityName: AuthorityName,
 
     @ManyToMany(mappedBy = "authorities", fetch = FetchType.LAZY)
-    var user: List<User> = mutableListOf()
+    var user: List<KakaoUser> = mutableListOf()
 ): AbstractBaseAuditEntity()

@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.auth.security
 
 import com.cultureshock.madeleine.domain.user.Authority
+import com.cultureshock.madeleine.domain.user.KakaoUser
 import com.cultureshock.madeleine.domain.user.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -8,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 class JwtUserFactory {
 
     companion object {
-        fun create(user: User): JwtUser {
+        fun create(user: KakaoUser): JwtUser {
             return JwtUser(
                 uid = user.id,
                 nickname = user.nickname,

@@ -3,10 +3,12 @@ package support
 import com.cultureshock.madeleine.auth.security.JwtUser
 import com.cultureshock.madeleine.auth.security.JwtUserFactory
 import com.cultureshock.madeleine.domain.user.Authority
+import com.cultureshock.madeleine.domain.user.KakaoUser
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
 import com.cultureshock.madeleine.domain.user.enum.Sex
 import com.cultureshock.madeleine.domain.user.enum.SocialType
+import com.cultureshock.madeleine.rest.dto.request.SignInRequest
 import org.springframework.security.core.userdetails.UserDetails
 
 const val NICK_NAME: String = "아무개"
@@ -27,6 +29,28 @@ const val RANDOM_PASSWORD_TEXT: String = "nEw_p@ssw0rd"
 const val VALID_TOKEN: String = "SOME_VALID_TOKEN"
 
 fun createUser(
+    id: Long = 1L,
+    nickname: String = NICK_NAME
+    , email: String = EMAIL
+) : User{
+    return User(
+        id = id,
+        nickname= nickname,
+        email = email
+    )
+}
+
+fun  createSignInRequest(
+    nickname: String = NICK_NAME
+    , email: String = EMAIL
+): SignInRequest{
+    return SignInRequest(
+        nickname= nickname,
+        email = email
+    )
+}
+
+fun createKakaoUser(
     socialType: SocialType = SOCIAL_TYPE
     , active: Boolean = ACTIVE
     , nickname: String = NICK_NAME
@@ -38,8 +62,8 @@ fun createUser(
     , email: String = EMAIL
     , phone: String = PHONE
     , sex: Sex = SEX
-) : User {
-    return User(
+) : KakaoUser {
+    return KakaoUser(
         nickname= nickname
         ,email = email
         ,active = active
@@ -62,5 +86,5 @@ fun createAuthority(
 }
 
 fun createUserDetails(): UserDetails{
-    return JwtUserFactory.create(createUser())
+    return JwtUserFactory.create(createKakaoUser())
 }

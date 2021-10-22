@@ -11,8 +11,16 @@ class UserService(
     private val userRepository: UserRepository
 ) {
 
+    fun getUserInfoByEmail(email: String): UserResponse? {
+        val user = userRepository.findByEmail(email)
+        return user?.let { UserResponse.of(it) }
+    }
+
+    /**
+     * @deprecated
+     */
     fun getUserInfo(user: AuthenticatedUser): UserResponse {
-        val user = userRepository.findById(user.uid).orElseThrow { ApiNotFoundUserException() }
+        val user = userRepository.findById(user.id).orElseThrow { ApiNotFoundUserException() }
         return UserResponse.of(user)
     }
 }

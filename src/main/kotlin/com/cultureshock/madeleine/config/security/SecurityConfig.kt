@@ -1,7 +1,6 @@
 package com.cultureshock.madeleine.config.security
 
 import com.cultureshock.madeleine.auth.security.JwtAuthenticationEntryPoint
-import com.cultureshock.madeleine.auth.security.JwtAuthenticationTokenFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
@@ -23,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 class SecurityConfig(
     private val unauthorizedHandler: JwtAuthenticationEntryPoint,
-    private val jwtAuthenticationTokenFilter: JwtAuthenticationTokenFilter,
+    //private val jwtAuthenticationTokenFilter: JwtAuthenticationTokenFilter,
     private val userDetailsService: UserDetailsService
 ) : WebSecurityConfigurerAdapter() {
 
@@ -56,6 +55,7 @@ class SecurityConfig(
             .and()
             .authorizeRequests()
             .antMatchers(
+                "/**",
                 "/health",
                 "/api/v1/auth/**",
                 "/api/v1/performance/list",
@@ -71,8 +71,5 @@ class SecurityConfig(
             .anyRequest().authenticated().and().cors()
         http
             .headers().frameOptions().disable()
-        http
-            .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
-
     }
 }

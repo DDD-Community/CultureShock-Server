@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.security
 
 import com.cultureshock.madeleine.auth.security.JwtTokenUtils
+import com.cultureshock.madeleine.domain.user.KakaoUserRepository
 import com.cultureshock.madeleine.domain.user.UserRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -9,10 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
-import support.USER_NAME
-import support.UnitTest
-import support.createUser
-import support.createUserDetails
+import support.*
 
 private const val NOT_VALID_TOKEN = ""
 private const val NEGATIVE_VALIDITY_TIME = -10L
@@ -22,7 +20,7 @@ private const val VALIDITY_TIME = 100L
 @UnitTest
 internal class JwtTokenUtilsTest {
     @MockK
-    private lateinit var userRepository: UserRepository
+    private lateinit var kakaoUserRepository: KakaoUserRepository
 
     @MockK
     private lateinit var userDetailsService: UserDetailsService
@@ -30,7 +28,7 @@ internal class JwtTokenUtilsTest {
 
     @BeforeEach
     internal fun setUp(){
-        every{ userRepository.findByUsernameAndActive(USER_NAME,true)} answers { createUser() }
+        every{ kakaoUserRepository.findByUsernameAndActive(USER_NAME,true)} answers { createKakaoUser() }
         every{ userDetailsService.loadUserByUsername(USER_NAME) } answers { createUserDetails() }
         userDetails = userDetailsService.loadUserByUsername(USER_NAME)
     }

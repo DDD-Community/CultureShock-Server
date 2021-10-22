@@ -4,6 +4,19 @@ import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserAccoun
 import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserProfile
 import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserProperties
 import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserResponse
+import com.cultureshock.madeleine.rest.dto.response.UserResponse
+
+fun createUserResponse(
+    id:Long = 1L
+    , nickname: String = NICK_NAME
+    , email: String = EMAIL
+): UserResponse {
+    return UserResponse(
+        id = id
+        , nickname = nickname
+        , email = email
+    )
+}
 
 fun createKakaoUserResponse(
     id: Long = 1,
