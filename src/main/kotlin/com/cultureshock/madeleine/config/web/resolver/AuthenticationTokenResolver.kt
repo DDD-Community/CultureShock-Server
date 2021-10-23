@@ -1,7 +1,6 @@
 package com.cultureshock.madeleine.config.web.resolver
 
 import com.cultureshock.madeleine.auth.security.JwtTokenUtils
-import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser
 import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser_v1
 import com.cultureshock.madeleine.domain.user.KakaoUserRepository
 import com.cultureshock.madeleine.domain.user.UserRepository
@@ -18,11 +17,18 @@ class AuthenticationTokenResolver(
     private val kakaoUserRepository: KakaoUserRepository
 ): HandlerMethodArgumentResolver {
 
-    override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == AuthenticatedUser::class.java
+    override fun supportsParameter(
+        parameter: MethodParameter
+    ): Boolean {
+        return parameter.parameterType == AuthenticatedUser_v1::class.java
     }
 
-    override fun resolveArgument(parameter: MethodParameter, mavContainer: ModelAndViewContainer?, webRequest: NativeWebRequest, binderFactory: WebDataBinderFactory?): Any? {
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): Any? {
         val token = webRequest.getToken()
         val username = jwtTokenUtils.getUsernameFromToken(token) ?: return null
         val user = kakaoUserRepository.findByUsernameAndActive(username) ?: return null
@@ -30,7 +36,8 @@ class AuthenticationTokenResolver(
         return AuthenticatedUser_v1(uid = user.id, username = user.username, token = token)
     }
 
-    private fun NativeWebRequest.getToken(): String {
+    private fun NativeWebRequest.getToken(
+    ): String {
         return getHeader(header)?.substring(7) ?: ""
     }
 }

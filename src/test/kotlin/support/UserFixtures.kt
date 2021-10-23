@@ -29,7 +29,7 @@ const val RANDOM_PASSWORD_TEXT: String = "nEw_p@ssw0rd"
 const val VALID_TOKEN: String = "SOME_VALID_TOKEN"
 
 fun createUser(
-    id: Long = 1L,
+    id: Long = 1,
     nickname: String = NICK_NAME
     , email: String = EMAIL
 ) : User{

@@ -1,5 +1,6 @@
 package com.cultureshock.madeleine.config.web.resolver
 
+import com.cultureshock.madeleine.config.security.LoginUser
 import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
@@ -15,18 +16,27 @@ import javax.servlet.http.HttpServletRequest
 
 
 class AuthenticationIdResolver(
+    private val header: String,
     private val userRepository: UserRepository
 ): HandlerMethodArgumentResolver {
 
-    override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == AuthenticatedUser::class.java
+    override fun supportsParameter(
+        parameter: MethodParameter
+    ): Boolean {
+        return parameter.hasParameterAnnotation(LoginUser::class.java)
     }
 
-    override fun resolveArgument(parameter: MethodParameter, mavContainer: ModelAndViewContainer?, webRequest: NativeWebRequest, binderFactory: WebDataBinderFactory?): Any? {
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): Any? {
+
         val request: HttpServletRequest = webRequest.getNativeRequest() as HttpServletRequest
         val user: User
         try {
-            val requestHeader: Long= request.getHeader("user_id").toLong()
+            val requestHeader: Long= request.getHeader(header).toLong()
             user = userRepository.findById(requestHeader).get()
         } catch (e: Exception){
             throw ApiUnauthrizedException()

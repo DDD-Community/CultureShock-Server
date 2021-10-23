@@ -1,6 +1,6 @@
 package com.cultureshock.madeleine.service.user
 
-import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser
+import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser_v1
 import com.cultureshock.madeleine.domain.user.UserRepository
 import com.cultureshock.madeleine.exception.ApiNotFoundUserException
 import com.cultureshock.madeleine.rest.dto.response.UserResponse
@@ -16,11 +16,8 @@ class UserService(
         return user?.let { UserResponse.of(it) }
     }
 
-    /**
-     * @deprecated
-     */
-    fun getUserInfo(user: AuthenticatedUser): UserResponse {
-        val user = userRepository.findById(user.id).orElseThrow { ApiNotFoundUserException() }
+    fun getUserInfo(id: Long): UserResponse {
+        val user = userRepository.findById(id).orElseThrow { ApiNotFoundUserException() }
         return UserResponse.of(user)
     }
 }

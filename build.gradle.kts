@@ -57,6 +57,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("org.springframework.security:spring-security-test")
     testImplementation("io.mockk:mockk:1.9.3.kotlin12")
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
 
     api("com.squareup.retrofit2:retrofit:2.6.0")
     api("com.squareup.retrofit2:converter-gson:2.6.0")

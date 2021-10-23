@@ -26,4 +26,4 @@ kakao:
 
 jwt:
   expiration: 1480000
-  header: Authorization
+  header: user_id

@@ -7,7 +7,7 @@ import com.cultureshock.madeleine.auth.client.kakao.dto.response.KakaoUserRespon
 import com.cultureshock.madeleine.rest.dto.response.UserResponse
 
 fun createUserResponse(
-    id:Long = 1L
+    id:Long = 1
     , nickname: String = NICK_NAME
     , email: String = EMAIL
 ): UserResponse {

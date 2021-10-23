@@ -48,7 +48,7 @@ class WebMvcSupportConfig(
     override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver>) {
         //jwt token
         //argumentResolvers.add(AuthenticationTokenResolver(header, jwtTokenUtils, userRepository))
-        argumentResolvers.add(AuthenticationIdResolver(userRepository))
+        argumentResolvers.add(AuthenticationIdResolver(header,userRepository))
         // pageable handelr
         argumentResolvers.add(PageableHandlerMethodArgumentResolver())
     }

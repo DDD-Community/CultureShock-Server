@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -13,7 +13,13 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 
 kakao:
   client_id: test
@@ -25,5 +31,5 @@ kakao:
 
 jwt:
   expiration: 100
-  header: Authorization
+  header: user_id
   secret: test

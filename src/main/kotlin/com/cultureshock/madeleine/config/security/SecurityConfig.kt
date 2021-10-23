@@ -61,7 +61,7 @@ class SecurityConfig(
                 "/api/v1/performance/list",
                 "/api/v1/performance/list/genrenm",
                 // swagger
-                 "/configuration/ui",
+                "/configuration/ui",
                 "/swagger-resources",
                 "/webjars/**", "/swagger/**",
                 "/v2/api-docs", "/v3/api-docs",

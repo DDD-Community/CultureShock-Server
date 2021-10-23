@@ -50,8 +50,6 @@ class KakaoAuthService(
         )
     }
 
-
-
     /**
      * @deprecated v0.1
      *

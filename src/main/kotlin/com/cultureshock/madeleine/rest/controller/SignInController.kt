@@ -30,13 +30,16 @@ class SignInController(
 
     @PostMapping("/login")
     @ApiOperation(value="카카오 로그인.POST", notes="[POST]카카오 로그인")
-    fun kakaoSignIn(@RequestBody request: SignInRequest): ResponseEntity<Any> {
+    fun kakaoSignIn(
+        @RequestBody request: SignInRequest
+    ): ResponseEntity<Any> {
         return response(kakaoAuthService.kakaoSignIn(request))
     }
 
     @GetMapping("/kakao/signin")
     @ApiOperation(value="카카오 로그인.GET", notes="[GET]카카오 로그인 시도 => 회원이 아니면 회원가입까지 진행 => callback")
-    fun kakaoBackendSignPage(): ResponseEntity<*> {
+    fun kakaoBackendSignPage(
+    ): ResponseEntity<*> {
         val redirectUrl = "https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=http://localhost:8080/api/v1/auth/kakao/signin/callback&response_type=code"
         val uri = URI(redirectUrl)
         val headers = HttpHeaders()
