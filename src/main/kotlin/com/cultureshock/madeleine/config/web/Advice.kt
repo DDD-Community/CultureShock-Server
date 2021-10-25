@@ -16,7 +16,7 @@ class ControllerAdviceRequestError : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = [ApiUnauthrizedException::class, ApiExistUserException::class])
     fun handleApiNotFoundUser(ex: ApiUnauthrizedException,request: WebRequest): ResponseEntity<ErrorsDetails> {
         val errorDetails = ErrorsDetails(
-            ex.code.status.toString().substring(0,3),
+            ex.code.status.toString().substring(0,3).toIntOrNull(),
             ex.timestamp,
             ex.code.message
         )

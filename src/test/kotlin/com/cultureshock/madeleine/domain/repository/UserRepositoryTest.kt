@@ -3,7 +3,6 @@ package com.cultureshock.madeleine.domain.repository
 
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
-import com.cultureshock.madeleine.domain.user.enum.SocialType
 import com.cultureshock.madeleine.rest.controller.SignInController
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
@@ -14,7 +13,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import support.RepositoryTest
-import java.util.*
 
 @RepositoryTest
 class UserRepositoryTest @Autowired constructor(

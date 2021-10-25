@@ -38,28 +38,7 @@ internal class PerformanceServiceTest {
             locationDetailRepository = locationDetailRepository
         )
     }
-
-    @Test
-    fun `현재 공연중인 공연목록을 페이지별로 불러온다`(){
-        //given
-        val performances: List<Performance> = createPerformances()
-        val pageable: Pageable = PageRequest.of(0,2)
-        val page: Page<Performance> = PageImpl(performances,pageable,3)
-
-        //when
-        every{ performanceRepository.findAllByPrfstateOrderByPrfpdfrom("공연중",pageable) } answers { page }
-
-        val response = performanceService.findAllByPrfstate(pageable = pageable, "공연중")
-
-        //then
-        assertAll(
-            { Assertions.assertThat(response.totalCount).isEqualTo(3)},
-            { Assertions.assertThat(response.totalPages).isEqualTo(2)},
-            { Assertions.assertThat(response.performanceList[0].prfnm).isEqualTo("종이아빠")},
-            { Assertions.assertThat(response.performanceList[1].mt20id).isEqualTo("PF181298")}
-        )
-    }
-
+/*
     @Test
     fun `현재 공연중인 공연목록 중 장르별로 불러온다`(){
         //given
@@ -75,24 +54,23 @@ internal class PerformanceServiceTest {
         assertAll(
             { Assertions.assertThat(response.totalCount).isEqualTo(3)},
             { Assertions.assertThat(response.totalPages).isEqualTo(2)},
-            { Assertions.assertThat(response.performanceList[2].prfnm).isEqualTo("카발레리아 루스티카나 [서울]")},
-            { Assertions.assertThat(response.performanceList[2].mt20id).isEqualTo("PF181380")}
+            { Assertions.assertThat(response.performanceList[2].performName).isEqualTo("카발레리아 루스티카나 [서울]")},
+            { Assertions.assertThat(response.performanceList[2].performId).isEqualTo("PF181380")}
         )
     }
-
+ */
     @Test
     fun `공연 ID로 공연 상세를 불러온다`(){
         //when
-        every{ performanceDetailRepository.findByMt20id(any())} answers { createPerformanceDetails()[2] }
-        every{ locationDetailRepository.findByMt10id(any())} answers { createLocationDetail()[2] }
-        val response : PerformanceDetailResponse = performanceService.findByMt20id("FC001808")
+        every{ performanceDetailRepository.findByPerformId(any())} answers { createPerformanceDetails()[2] }
+        every{ locationDetailRepository.findByHallId(any())} answers { createLocationDetail()[2] }
+        val response : PerformanceDetailResponse = performanceService.findByPerformId("FC001808")
 
         //then
         assertAll(
-            { Assertions.assertThat(response.genrenm).isEqualTo("오페라") },
-            { Assertions.assertThat(response.prfruntime).isEqualTo("1시간 30분") },
-            { Assertions.assertThat(response.locationDetailResponse?.telno).isEqualTo("010-4947-7748") },
-            { Assertions.assertThat(response.locationDetailResponse?.adres).isEqualTo("서울특별시 송파구 위례성대로 18 금복빌딩 B1층 아트홀제이") }
+            { Assertions.assertThat(response.performKind).isEqualTo("오페라") },
+            { Assertions.assertThat(response.performRuntime).isEqualTo("1시간 30분") },
+            { Assertions.assertThat(response.locationDetailResponse?.hallAddres).isEqualTo("서울특별시 송파구 위례성대로 18 금복빌딩 B1층 아트홀제이") }
         )
     }
 }

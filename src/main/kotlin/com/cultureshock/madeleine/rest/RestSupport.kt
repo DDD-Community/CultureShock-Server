@@ -14,26 +14,26 @@ abstract class RestSupport {
         return ResponseEntity
             .ok()
             .contentType(MEDIA_TYPE_APPLICATION_JSON_UTF8)
-            .body(Response(code = "200", data = data, message = "ok"))
+            .body(Response(code = 200, data = data, message = "ok"))
     }
 
     protected open fun unauthorized(message: String): ResponseEntity<Any> {
         return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
-            .body(Response(code = "401", data = null, message = message))
+            .body(Response(code = 401, data = null, message = message))
     }
 
     protected open fun response_400(message: String): ResponseEntity<Any> {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .contentType(MEDIA_TYPE_APPLICATION_JSON_UTF8)
-            .body(Response(code = "400", data = null, message = message))
+            .body(Response(code = 400, data = null, message = message))
     }
 
     protected open fun response_500(message: String): ResponseEntity<Any> {
         return ResponseEntity
             .status(HttpStatus.SERVICE_UNAVAILABLE)
             .contentType(MEDIA_TYPE_APPLICATION_JSON_UTF8)
-            .body(Response(code = "500", data = null, message = message))
+            .body(Response(code = 500, data = null, message = message))
     }
 }

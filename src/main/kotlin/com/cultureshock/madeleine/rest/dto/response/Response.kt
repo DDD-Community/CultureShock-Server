@@ -12,7 +12,7 @@ data class HealthCheckResponse(
 )
 
 data class Response<T>(
-    val code: String,
+    val code: Int,
     val timestamp: Long = LocalDateTime.now().toSeoulEpochSecond()!!,
     val message: String,
     val data: T

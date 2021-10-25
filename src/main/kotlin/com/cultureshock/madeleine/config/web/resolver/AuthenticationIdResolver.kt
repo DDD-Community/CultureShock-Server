@@ -37,11 +37,10 @@ class AuthenticationIdResolver(
         val user: User
         try {
             val requestHeader: Long= request.getHeader(header).toLong()
-            user = userRepository.findById(requestHeader).get()
+            user = userRepository.findByUserId(requestHeader)!!
         } catch (e: Exception){
             throw ApiUnauthrizedException()
         }
-
         return AuthenticatedUser(id = user.id, nickname = user.nickname, email = user.email)
     }
 }

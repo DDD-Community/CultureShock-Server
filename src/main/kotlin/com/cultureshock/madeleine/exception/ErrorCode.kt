@@ -18,4 +18,4 @@ enum class ErrorCode(
     UNAUTHORIZED_KAKAO(HttpStatus.UNAUTHORIZED, "카카오 로그인에 실패하였습니다.")
 }
 
-data class ErrorsDetails(val code: String, val timezone: Long, val message: String)
+data class ErrorsDetails(val code: Int?, val timezone: Long, val message: String)

@@ -1,31 +1,20 @@
 package com.cultureshock.madeleine.rest.controller
 
 import com.cultureshock.madeleine.MadeleineApplication
-import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.UserRepository
-import com.cultureshock.madeleine.rest.RestSupport
-
-import com.cultureshock.madeleine.rest.dto.response.UserResponse
 import com.cultureshock.madeleine.service.user.KakaoAuthService
 import com.cultureshock.madeleine.service.user.UserService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito.given
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import support.createUser
 import support.createUserResponse

@@ -1,8 +1,10 @@
 package com.cultureshock.madeleine.domain.user
 
+import com.cultureshock.madeleine.common.util.toSeoulEpochSecond
 import com.cultureshock.madeleine.domain.AbstractBaseAuditEntity
 import com.cultureshock.madeleine.domain.user.enum.Sex
 import com.cultureshock.madeleine.domain.user.enum.SocialType
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.persistence.*
 
@@ -16,6 +18,9 @@ class User(
     var nickname: String,
 
     val email: String,
+
+    @Column(name = "lastlogin")
+    var lastLogin: Long = LocalDateTime.now().toSeoulEpochSecond()!!
 
 ) : AbstractBaseAuditEntity()
 

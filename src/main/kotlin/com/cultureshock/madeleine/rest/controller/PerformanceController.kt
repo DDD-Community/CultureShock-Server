@@ -16,17 +16,41 @@ import org.springframework.web.bind.annotation.*
 class PerformanceController(
     private var performanceService: PerformanceService
 ): RestSupport() {
+/*
+    @PostMapping("/list")
+    @ApiOperation(value="공연 목록 조회", notes = "장르, 공연상태, 지역별 공연 목록 조회")
+    fun getAllByGenrenmAndStateAndLocation(
+        @RequestBody(required = false) kind: Int = 0,
+        @RequestBody(required = false) state: Int = 0,
+        @RequestBody(required = false) location: Int = 0,
+        @PageableDefault pageable: Pageable
+    ): ResponseEntity<Any> {
+        return response(performanceService.findAllByGenrenmAndStateAndLocation(kind, state, location, pageable))
+    }
 
+ */
+
+
+    @GetMapping("/{performId}", produces = ["application/json"])
+    @ApiOperation(value="공연 상세 조회", notes = "공연 상세 조회 by 공연 ID")
+    fun getPfById(
+        @PathVariable performId: String): ResponseEntity<Any>{
+        return response(performanceService.findByPerformId(performId))
+    }
+
+
+    /*
     @GetMapping("/list",produces = ["application/json"])
     @ApiOperation(value="공연 목록 조회", notes="공연 목록 조회 paging, order by 공연최신순, 공연중 only")
     fun getAll(
         @PageableDefault pageable: Pageable,
-        @RequestParam("prfstate",required = false, defaultValue = "공연중")
-        prfstate: String
+        @RequestParam("prfstate",required = false, defaultValue = "공연중") prfstate: String
     ): ResponseEntity<Any> {
         return response(performanceService.findAllByPrfstate(pageable = pageable, prfstate = prfstate))
     }
-    
+    */
+
+    /*
     @GetMapping("/list/genrenm", produces = ["application/json"])
     @ApiOperation(value="장르별 공연 목록 조회", notes = "장르별 공연 목록 조회 paging, order by 공연최신순, 공연중 only")
     fun getAllByGenrenm(
@@ -37,12 +61,5 @@ class PerformanceController(
     ): ResponseEntity<Any> {
         return response(performanceService.findAllByGenrenmAndPrfstate(genrenm = genrenm, prfstate = prfstate, pageable))
     }
-
-    @GetMapping("/{mt20id}", produces = ["application/json"])
-    @ApiOperation(value="공연 상세 조회", notes = "공연 상세 조회 by 공연 ID")
-    fun getPfById(
-        @LoginUser user: Long,
-        @PathVariable mt20id: String): ResponseEntity<Any>{
-        return response(performanceService.findByMt20id(mt20id))
-    }
+    */
 }

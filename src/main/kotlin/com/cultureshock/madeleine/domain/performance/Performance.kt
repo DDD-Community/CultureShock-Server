@@ -1,6 +1,8 @@
 package com.cultureshock.madeleine.domain.performance
 
 import com.cultureshock.madeleine.domain.AbstractBaseAuditEntity
+import com.cultureshock.madeleine.domain.performance.enum.PerformKind
+import com.cultureshock.madeleine.domain.performance.enum.PerformState
 import com.cultureshock.madeleine.domain.user.Authority
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.domain.user.enum.AuthorityName
@@ -19,27 +21,29 @@ class Performance (
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long, //seq
 
-        @Column(nullable= false)
-        val mt20id: String,  //공연ID
+        @Column(name = "mt20id", nullable= false)
+        val performId: String,  //공연ID
 
-        @Column(nullable = false)
-        val prfnm: String,  //공연명
+        @Column(name = "prfnm", nullable = false)
+        val performName: String,  //공연명
 
-        @Column(nullable = false)
-        val prfpdfrom: LocalDate,  //공연 시작일
+        @Column(name = "prfpdfrom", nullable = false)
+        val performStartDate: Date,  //공연 시작일
 
-        @Column(nullable = false)
-        val prfpdto: LocalDate,  //공연 종료일
+        @Column(name = "prfpdto", nullable = false)
+        val performEndDate: Date,  //공연 종료일
 
-        @Column(nullable = false)
-        val fcltynm: String,  //공연 시설명
+        @Column(name ="fcltynm", nullable = false)
+        val hallName: String,  //공연 시설명
 
-        val poster: String,  //포스터이미지 URL
+        @Column(name = "poster")
+        val posterUrl: String,  //포스터이미지 URL
 
-        @Column(nullable = false)
-        var prfstate: String,  // 공연 상태 (1. 공연예정, 2.공연 중, 3.공연 완료)
+        @Column(name = "prfstate", nullable = false)
+        var performState: String,  // 공연 상태 (0.공연 중, 1. 공연예정, 2.공연 완료)
 
-        val genrenm: String  //공연 장르 명(ex. 연극)
+        @Column(name = "genrenm")
+        val performKind: String,  //공연 장르 명(ex. 연극)
 
         ) : AbstractBaseAuditEntity()
 
@@ -48,79 +52,91 @@ class Performance (
 class PerformanceDetail(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long ,//seq
+        val pid: Long ,//seq
 
-        @Column(nullable= false)
-        val mt20id: String,      //공연ID
+        @Column(name = "mt20id", nullable= false)
+        val performId: String,      //공연ID
 
         @Column(name="mt10id", nullable= false)
-        val mt10id: String,      //공연시설ID
+        val hallId: String,      //공연시설ID
 
-        @Column(nullable= false)
-        val prfnm: String,       //공연명
+        @Column(name = "prfcast")
+        val performCast: String? =null,    //공연출연진
 
-        @Column(nullable= false)
-        val prfpdfrom: LocalDate,     //공연시작일
+        @Column(name = "prfcrew")
+        val performCrew: String? =null,    //공연제작진
 
-        @Column(nullable= false)
-        val prfpdto: LocalDate,       //공연종료일
+        @Column(name = "prfruntime")
+        val performRuntime: String? = null, //공연런타임
 
-        val fcltynm: String? =null,    //공연시설명(공연장명)
-        val prfcast: String? =null,    //공연출연진
-        val prfcrew: String? =null,    //공연제작진
-        val prfruntime: String? = null, //공연런타임
+        @Column(name = "prfage")
+        var performAge: String = "전체이용가",//공연 관람 연령
 
-        var prfage: String = "전체이용가",//공연 관람 연령
-        var entrpsnm: String? = null,   //제작사
+        @Column(name = "entrpsnm")
+        var enterName: String? = null,   //제작사
 
-        @Column(nullable= false)
-        var pcseguidance: String,//티켓가격
+        @Column(name = "pcseguidance", nullable= false)
+        var price: String,//티켓가격
 
-        @Column(nullable= false)
-        val poster: String,      //포스터 이미지 경로
+        @Column(name = "styurl_1")
+        val performPhotoUrl1: String? = null, // 소개이미지목록
+        @Column(name = "styurl_2")
+        val performPhotoUrl2: String? = null, // 소개이미지목록
+        @Column(name = "styurl_3")
+        val performPhotoUrl3: String? = null, // 소개이미지목록
+        @Column(name = "styurl_4")
+        val performPhotoUrl4: String? = null, // 소개이미지목록
 
-        val sty: String? = null,         //줄거리
-        val genrenm: String? = null,     //장르
-        var prfstate: String? = null,    //공연상태
-        var openrun: Char = 'N',        //오픈런
+        @Column(name = "dtguidance")
+        var performTime: String? =null,   //공연시간
 
-        val styurl_1: String? = null, // 소개이미지목록1
-        val styurl_2: String? = null, // 소개이미지목록2
-        val styurl_3: String? = null, // 소개이미지목록3
-        val styurl_4: String? = null, // 소개이미지목록4
+        @Column(name= "fcltynm")
+        val hallName: String? =null,    //공연시설명(공연장명)
 
-        var dtguidance: String? =null,   //공연시간
+        @Column(name = "poster", nullable= false)
+        val posterUrl: String,      //포스터 이미지 경로
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "l_mt10id", referencedColumnName = "mt10id")
-        val locationDetails : LocationDetail? = null//위치
+        @Column(name = "genrenm")
+        val performKind: String?,  //공연 장르 명(ex. 연극)
 
-): AbstractBaseAuditEntity()
+        @Column(name = "prfstate")
+        var performState: String? = null,    //공연상태
+
+        @Column(name = "prfnm", nullable = false)
+        val performName: String,       //공연명
+
+        @Column(name = "prfpdfrom", nullable = false)
+        val performStartDate: Date,  //공연 시작일
+
+        @Column(name = "prfpdto", nullable = false)
+        val performEndDate: Date,  //공연 종료일
+
+        @OneToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "locationHallId")
+        val hallLocation : LocationDetail? = null, //위치
+)
 
 @Entity
 @Table(name = "performance_location_detail")
 class LocationDetail(
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val lid: Long,
 
         @Column(name="mt10id", nullable = false)
-        val mt10id: String,              //공연시설ID
+        val hallId: String,              //공연시설ID
 
-        @Column(nullable = false)
-        val fcltynm: String,             //공연 시설 명
+        @Column(name = "fcltynm",nullable = false)
+        val hallName: String,             //공연 시설 명
 
-        var mt13cnt: Int? = null,        //공연장 수
-        var fcltychartr: String? = null, //시설 특성(ex. 기타(공공))
-        var opende: String? = null,      //개관 연도
-        var seatscale: Int? = null,      //객석 수
-        var telno: String? = null,       //전화번호
-        var relateurl: String? = null,   //홈페이지
-        var adres: String? = null,       //주소
-        var la: Double? = null,          //위도
-        var lo: Double? = null,           //경도
+        @Column(name = "relateurl")
+        var hallUrl: String? = null,   //홈페이지
 
-        @OneToMany(fetch = FetchType.LAZY, mappedBy = "locationDetails")
-        val performanceDetail: Set<PerformanceDetail>? = mutableSetOf()
+        @Column(name = "adres")
+        var hallAddres: String? = null,  //주소
 
-): Serializable, AbstractBaseAuditEntity()
+        var la: Double? = null,     //위도
+        var lo: Double? = null,     //경도
+
+): Serializable

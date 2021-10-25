@@ -9,5 +9,6 @@ class SignInResponse_v1(
     val token: String
 )
 class SignInResponse(
-    val user_id: Long
+    val user_id: Long,
+    val lastLogin : Long
 )

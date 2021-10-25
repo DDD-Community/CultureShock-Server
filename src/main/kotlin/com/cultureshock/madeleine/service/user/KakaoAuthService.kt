@@ -8,6 +8,7 @@ import com.cultureshock.madeleine.exception.ErrorCode
 import com.cultureshock.madeleine.exception.UserApiException
 import com.cultureshock.madeleine.auth.security.JwtTokenUtils
 import com.cultureshock.madeleine.common.util.KakaoAccountUtils
+import com.cultureshock.madeleine.common.util.toSeoulEpochSecond
 import com.cultureshock.madeleine.domain.user.User
 import com.cultureshock.madeleine.rest.dto.request.SignInRequest
 import com.cultureshock.madeleine.rest.dto.request.SignInRequest_v1
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class KakaoAuthService(
@@ -44,9 +46,12 @@ class KakaoAuthService(
             ?:userAuthService.joinUser(UserResponse.of(
                 user = User(nickname = request.nickname, email = request.email)
             ))
+        //last login update
+        user.lastLogin = LocalDateTime.now().toSeoulEpochSecond()!!
 
         return SignInResponse(
-            user_id = user.id
+            user_id = user.id,
+            lastLogin = user.lastLogin
         )
     }
 

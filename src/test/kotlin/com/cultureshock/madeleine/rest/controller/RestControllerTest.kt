@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.slot
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.core.MethodParameter
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -26,9 +27,6 @@ import support.createUser
 abstract class RestControllerTest(): RestSupport() {
     @MockkBean
     private lateinit var loginUserResolver: AuthenticationIdResolver
-
-    @Autowired
-    lateinit var objectMapper: ObjectMapper
 
     lateinit var mockMvc: MockMvc
 

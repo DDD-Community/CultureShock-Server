@@ -2,6 +2,7 @@ package com.cultureshock.madeleine.domain.repository
 
 import com.cultureshock.madeleine.domain.performance.*
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
+import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceEntityResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.transaction.annotation.Transactional
 import support.RepositoryTest
 import support.createLocationDetail
 import support.createPerformanceDetails
@@ -30,8 +32,8 @@ class PerformanceRepositoryTest @Autowired constructor(
         val locationDetail = createLocationDetail()
 
         performanceRepository.saveAll(performances)
-        performanceDetailRepository.saveAll(performanceDetails)
         locationDetailRepository.saveAll(locationDetail)
+        performanceDetailRepository.saveAll(performanceDetails)
     }
 
     @Test
@@ -41,67 +43,41 @@ class PerformanceRepositoryTest @Autowired constructor(
 
         assertAll(
             { assertThat(pfList.size).isEqualTo(2) },
-            { assertThat(pfList[0].prfnm).isEqualTo("종이아빠") },
-            { assertThat(pfList[0].genrenm).isEqualTo("뮤지컬") },
-            { assertThat(pfList[1].prfnm).isEqualTo("아리랑 랩소디 [충주]") },
-            { assertThat(pfList[1].prfstate).isEqualTo("공연완료") },
+            { assertThat(pfList[0].performName).isEqualTo("종이아빠") },
+            { assertThat(pfList[0].performKind).isEqualTo("뮤지컬") },
+            { assertThat(pfList[1].performName).isEqualTo("아리랑 랩소디 [충주]") },
+            { assertThat(pfList[1].performState).isEqualTo("공연완료") },
         )
     }
 
     @Test
-    fun `현재 공연중 공연 목록을 최신 개봉순으로 가져온다`() {
+    fun `현재 공연중 공연 목록을 조건없이 최신 개봉순으로 가져온다`() {
         val pageable: Pageable = PageRequest.of(0, 10)
-        val pfList: MutableList<Performance> =
-            performanceRepository.findAllByPrfstateOrderByPrfpdfrom("공연중", pageable).content
+        val pfList: MutableList<PerformanceEntityResponse> =
+            performanceDetailRepository.findAllByGenrenmAndPrfstateAndLocation(0,0,0, pageable).content
 
         assertAll(
-            { assertThat(pfList.size).isEqualTo(1) },
-            { assertThat(pfList[0].prfnm).isEqualTo("종이아빠") },
-            { assertThat(pfList[0].poster).isEqualTo("http://www.kopis.or.kr/upload/pfmPoster/PF_PF131819_160607_152247.jpg") },
-        )
-    }
-
-    @Test
-    fun `현재 공연 목록을 장르로 매핑 후 가져온다`() {
-        val pageable: Pageable = PageRequest.of(0, 10)
-        val pfList: MutableList<Performance> =
-            performanceRepository.findAllByGenrenmAndPrfstate(genrenm = "오페라", prfstate = "공연예정", pageable).content
-
-        assertAll(
-            { assertThat(pfList.size).isEqualTo(1) },
-            { assertThat(pfList[0].prfnm).isEqualTo("카발레리아 루스티카나 [서울]") },
-            { assertThat(pfList[0].prfpdfrom).isEqualTo(LocalDate.of(2021, 11, 5)) },
-        )
-    }
-
-    @Test
-    fun `공연 목록 중 공연완료 목록으로 가져온다`() {
-        val pageable: Pageable = PageRequest.of(0, 10)
-        val pfList: MutableList<Performance> =
-            performanceRepository.findAllByGenrenmAndPrfstate(genrenm = "국악", prfstate = "공연완료", pageable).content
-
-        assertAll(
-            { assertThat(pfList.size).isEqualTo(1) },
-            { assertThat(pfList[0].prfnm).isEqualTo("아리랑 랩소디 [충주]") },
-            { assertThat(pfList[0].prfstate).isEqualTo("공연완료") },
+            { assertThat(pfList.size).isEqualTo(3) },
+            { assertThat(pfList[0].performName).isEqualTo("종이아빠") },
+            { assertThat(pfList[0].posterUrl).isEqualTo("http://www.kopis.or.kr/upload/pfmPoster/PF_PF131819_160908_093947.jpg") },
+            { assertThat(pfList[1].performName).isEqualTo("아리랑 랩소디 [충주]") },
+            { assertThat(pfList[2].performName).isEqualTo("카발레리아 루스티카나 [서울]") },
         )
     }
 
     @Test
     fun `공연ID로 공연 상세 및 공연 장소 상세 를 가져온다`() {
         val pfDetail: PerformanceDetail =
-            performanceDetailRepository.findByMt20id("PF181298") ?: throw ArguExistPerformanceException()
+            performanceDetailRepository.findByPerformId("PF181298") ?: throw ArguExistPerformanceException()
 
-        val pfLocation = locationDetailRepository.findByMt10id(pfDetail.mt10id)?: throw ArguExistPerformanceException()
+        val pfLocation = locationDetailRepository.findByHallId(pfDetail.hallId)?: throw ArguExistPerformanceException()
 
         assertAll(
             //Performance Detail test
             { assertThat(pfDetail).isNotNull },
-            { assertThat(pfDetail.prfnm).isEqualTo("아리랑 랩소디 [충주]") },
-            { assertThat(pfDetail.prfstate).isEqualTo("공연완료") },
+            { assertThat(pfDetail.performName).isEqualTo("아리랑 랩소디 [충주]") },
+            { assertThat(pfDetail.performState).isEqualTo("공연완료") },
             //Location test
-            { assertThat(pfLocation.seatscale).isEqualTo(933) },
-            { assertThat(pfLocation.telno).isEqualTo("043-850-3914") },
             { assertThat(pfLocation.la).isEqualTo(36.9707081) }
         )
     }
@@ -110,11 +86,11 @@ class PerformanceRepositoryTest @Autowired constructor(
     fun `공연ID로 공연 상세 호출 시 매핑값이 없다면 예외를 불러온다`() {
         assertThrows<ArguExistPerformanceException> {
             val pfDetail: PerformanceDetail =
-                performanceDetailRepository.findByMt20id("PF000000") ?: throw ArguExistPerformanceException()
+                performanceDetailRepository.findByPerformId("PF000000") ?: throw ArguExistPerformanceException()
         }
         assertThrows<ArguExistPerformanceException> {
             val pfLocation: LocationDetail =
-                locationDetailRepository.findByMt10id("FP000000") ?: throw ArguExistPerformanceException()
+                locationDetailRepository.findByHallId("FP000000") ?: throw ArguExistPerformanceException()
         }
     }
 }
