@@ -34,7 +34,7 @@ interface PerformanceDetailRepository : JpaRepository<PerformanceDetail, Long>, 
 }
 
 interface CustomPerformanceDetailRepository{
-    fun findAllByGenrenmAndPrfstateAndLocation(
+    fun findAllByPerformKindAndPerformState(
         @Param("kind") performKind: Int,
         @Param("state") state: Int,
         @Param("location") hallAddress: Int,
@@ -73,7 +73,7 @@ class PerformanceDetailRepositorySupport(
             .fetchOne()
     }
 
-    override fun findAllByGenrenmAndPrfstateAndLocation(
+    override fun findAllByPerformKindAndPerformState(
         @Param("kind") performKind: Int,
         @Param("state") state: Int,
         @Param("location") hallAddress: Int,

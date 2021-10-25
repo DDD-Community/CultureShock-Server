@@ -38,27 +38,7 @@ internal class PerformanceServiceTest {
             locationDetailRepository = locationDetailRepository
         )
     }
-/*
-    @Test
-    fun `현재 공연중인 공연목록 중 장르별로 불러온다`(){
-        //given
-        val performances: List<Performance> = createPerformances()
-        val pageable: Pageable = PageRequest.of(0,2)
-        val page: Page<Performance> = PageImpl(performances,pageable,3)
 
-        //when
-        every{ performanceRepository.findAllByGenrenmAndPrfstate("오페라","공연중",pageable) } answers { page }
-        val response = performanceService.findAllByGenrenmAndPrfstate("오페라","공연중", pageable)
-
-        //then
-        assertAll(
-            { Assertions.assertThat(response.totalCount).isEqualTo(3)},
-            { Assertions.assertThat(response.totalPages).isEqualTo(2)},
-            { Assertions.assertThat(response.performanceList[2].performName).isEqualTo("카발레리아 루스티카나 [서울]")},
-            { Assertions.assertThat(response.performanceList[2].performId).isEqualTo("PF181380")}
-        )
-    }
- */
     @Test
     fun `공연 ID로 공연 상세를 불러온다`(){
         //when

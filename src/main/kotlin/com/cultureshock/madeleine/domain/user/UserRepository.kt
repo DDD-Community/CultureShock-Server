@@ -4,6 +4,7 @@ import com.cultureshock.madeleine.domain.user.enum.SocialType
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 import javax.annotation.Resource
@@ -12,10 +13,11 @@ import javax.annotation.Resource
  * User
  */
 @Repository
-interface UserRepository : JpaRepository<User,Long>, CustomUserRepository{
+interface UserRepository : JpaRepository<User, Long>, QUserRepository{
 }
-interface CustomUserRepository{
-    fun findByUserId(id: Long): User?
+
+interface QUserRepository{
+    //fun findById(id: Long): User?
     fun findByEmail(email: String): User?
 }
 
@@ -37,19 +39,11 @@ interface CustomKakaoUserRepository{
 /**
  * Query DSL
  */
-
+@Repository
 class UserRepositorySupport(
     @Resource(name = "jpaQueryFactory")
     val query: JPAQueryFactory
-) : QuerydslRepositorySupport(User::class.java), CustomUserRepository {
-
-    override fun findByUserId(
-        id: Long
-    ): User? {
-        return query.selectFrom(QUser.user)
-            .where(QUser.user.id.eq(id))
-            .fetchOne()
-    }
+) : QuerydslRepositorySupport(User::class.java), QUserRepository {
 
     override fun findByEmail(
         email: String
@@ -58,7 +52,15 @@ class UserRepositorySupport(
             .where(QUser.user.email.eq(email))
             .fetchOne()
     }
-
+    /*
+    override fun findById(
+        id: Long
+    ): User? {
+        return query.selectFrom(QUser.user)
+            .where(QUser.user.id.eq(id))
+            .fetchOne()
+    }
+    */
 }
 
 

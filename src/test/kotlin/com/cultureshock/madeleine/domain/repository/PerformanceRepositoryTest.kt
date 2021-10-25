@@ -54,7 +54,7 @@ class PerformanceRepositoryTest @Autowired constructor(
     fun `현재 공연중 공연 목록을 조건없이 최신 개봉순으로 가져온다`() {
         val pageable: Pageable = PageRequest.of(0, 10)
         val pfList: MutableList<PerformanceEntityResponse> =
-            performanceDetailRepository.findAllByGenrenmAndPrfstateAndLocation(0,0,0, pageable).content
+            performanceDetailRepository.findAllByPerformKindAndPerformState(0,0,0, pageable).content
 
         assertAll(
             { assertThat(pfList.size).isEqualTo(3) },

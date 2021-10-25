@@ -36,10 +36,10 @@ class PerformanceService(
     ): PerformanceDetailListResponse{
 
         val performanceDetailList: MutableList<PerformanceEntityResponse> =
-            performanceDetailRepository.findAllByGenrenmAndPrfstateAndLocation(kind, state, location, pageable).content
+            performanceDetailRepository.findAllByPerformKindAndPerformState(kind, state, location, pageable).content
 
-        val totalCount: Long = performanceDetailRepository.findAllByGenrenmAndPrfstateAndLocation(kind,state,location,pageable).totalElements
-        val totalPages: Int = performanceDetailRepository.findAllByGenrenmAndPrfstateAndLocation(kind,state,location,pageable).totalPages
+        val totalCount: Long = performanceDetailRepository.findAllByPerformKindAndPerformState(kind,state,location,pageable).totalElements
+        val totalPages: Int = performanceDetailRepository.findAllByPerformKindAndPerformState(kind,state,location,pageable).totalPages
 
         return PerformanceDetailListResponse.of(performanceDetailList, totalCount, totalPages)
     }

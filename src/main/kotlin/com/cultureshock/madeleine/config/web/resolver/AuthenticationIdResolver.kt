@@ -2,8 +2,7 @@ package com.cultureshock.madeleine.config.web.resolver
 
 import com.cultureshock.madeleine.config.security.LoginUser
 import com.cultureshock.madeleine.config.web.dto.AuthenticatedUser
-import com.cultureshock.madeleine.domain.user.User
-import com.cultureshock.madeleine.domain.user.UserRepository
+import com.cultureshock.madeleine.domain.user.*
 import com.cultureshock.madeleine.exception.ApiNotFoundUserException
 import com.cultureshock.madeleine.exception.ApiUnauthrizedException
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
@@ -37,7 +36,7 @@ class AuthenticationIdResolver(
         val user: User
         try {
             val requestHeader: Long= request.getHeader(header).toLong()
-            user = userRepository.findByUserId(requestHeader)!!
+            user = userRepository.findById(requestHeader).get()
         } catch (e: Exception){
             throw ApiUnauthrizedException()
         }
