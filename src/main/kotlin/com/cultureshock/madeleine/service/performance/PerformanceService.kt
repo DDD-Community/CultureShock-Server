@@ -1,9 +1,6 @@
 package com.cultureshock.madeleine.service.performance
 
 import com.cultureshock.madeleine.domain.performance.*
-import com.cultureshock.madeleine.domain.performance.enum.HallLocation
-import com.cultureshock.madeleine.domain.performance.enum.PerformKind
-import com.cultureshock.madeleine.domain.performance.enum.PerformState
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
 import com.cultureshock.madeleine.rest.dto.response.performance.*
 import org.springframework.data.domain.Page
@@ -28,7 +25,7 @@ class PerformanceService(
      * @param Pageable, kind, state, location
      * @return PerformanceListResponse() -> totalCount, totalPage, list
      */
-    fun findAllByGenrenmAndStateAndLocation(
+    fun findAllJoinFetch(
         kind: Int,
         state: Int,
         location: Int,
@@ -36,15 +33,13 @@ class PerformanceService(
     ): PerformanceDetailListResponse{
 
         val performanceDetailList: MutableList<PerformanceEntityResponse> =
-            performanceDetailRepository.findAllByPerformKindAndPerformState(kind, state, location, pageable).content
+            performanceDetailRepository.findAllJoinAll(kind, state, location, pageable).content
 
-        val totalCount: Long = performanceDetailRepository.findAllByPerformKindAndPerformState(kind,state,location,pageable).totalElements
-        val totalPages: Int = performanceDetailRepository.findAllByPerformKindAndPerformState(kind,state,location,pageable).totalPages
+        val totalCount: Long = performanceDetailRepository.findAllJoinAll(kind,state,location,pageable).totalElements
+        val totalPages: Int = performanceDetailRepository.findAllJoinAll(kind,state,location,pageable).totalPages
 
         return PerformanceDetailListResponse.of(performanceDetailList, totalCount, totalPages)
     }
-
-
 
     /**
      * @title 공연 상세

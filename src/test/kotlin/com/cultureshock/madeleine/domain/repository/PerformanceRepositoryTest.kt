@@ -11,22 +11,23 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.transaction.annotation.Transactional
 import support.RepositoryTest
 import support.createLocationDetail
 import support.createPerformanceDetails
 import support.createPerformances
-import java.time.LocalDate
+
 
 @RepositoryTest
 class PerformanceRepositoryTest @Autowired constructor(
     val performanceRepository: PerformanceRepository,
     val performanceDetailRepository: PerformanceDetailRepository,
-    val locationDetailRepository: LocationDetailRepository
+    val locationDetailRepository: LocationDetailRepository,
+
 ) {
     @BeforeEach
     @Throws(Exception::class)
     internal fun setUp() {
+
         val performances = createPerformances()
         val performanceDetails = createPerformanceDetails()
         val locationDetail = createLocationDetail()
@@ -51,17 +52,16 @@ class PerformanceRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `현재 공연중 공연 목록을 조건없이 최신 개봉순으로 가져온다`() {
+    fun `현재 공연중 공연 목록을 공연 중을 최신 개봉순으로 가져온다`() {
         val pageable: Pageable = PageRequest.of(0, 10)
         val pfList: MutableList<PerformanceEntityResponse> =
-            performanceDetailRepository.findAllByPerformKindAndPerformState(0,0,0, pageable).content
+            //전체, 공연중, 전체지역
+            performanceDetailRepository.findAllJoinAll(0,0,0, pageable).content
 
         assertAll(
-            { assertThat(pfList.size).isEqualTo(3) },
+            { assertThat(pfList.size).isEqualTo(1) },
             { assertThat(pfList[0].performName).isEqualTo("종이아빠") },
             { assertThat(pfList[0].posterUrl).isEqualTo("http://www.kopis.or.kr/upload/pfmPoster/PF_PF131819_160908_093947.jpg") },
-            { assertThat(pfList[1].performName).isEqualTo("아리랑 랩소디 [충주]") },
-            { assertThat(pfList[2].performName).isEqualTo("카발레리아 루스티카나 [서울]") },
         )
     }
 

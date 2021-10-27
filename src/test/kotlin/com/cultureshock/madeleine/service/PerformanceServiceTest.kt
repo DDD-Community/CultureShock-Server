@@ -1,9 +1,6 @@
 package com.cultureshock.madeleine.service
 
-import com.cultureshock.madeleine.domain.performance.LocationDetailRepository
-import com.cultureshock.madeleine.domain.performance.Performance
-import com.cultureshock.madeleine.domain.performance.PerformanceDetailRepository
-import com.cultureshock.madeleine.domain.performance.PerformanceRepository
+import com.cultureshock.madeleine.domain.performance.*
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceDetailResponse
 import com.cultureshock.madeleine.service.performance.PerformanceService
 import io.mockk.every

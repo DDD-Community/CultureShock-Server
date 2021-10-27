@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @Api(tags = ["공연"])
@@ -16,20 +17,17 @@ import org.springframework.web.bind.annotation.*
 class PerformanceController(
     private var performanceService: PerformanceService
 ): RestSupport() {
-/*
+
     @PostMapping("/list")
     @ApiOperation(value="공연 목록 조회", notes = "장르, 공연상태, 지역별 공연 목록 조회")
     fun getAllByGenrenmAndStateAndLocation(
-        @RequestBody(required = false) kind: Int = 0,
-        @RequestBody(required = false) state: Int = 0,
-        @RequestBody(required = false) location: Int = 0,
+        @RequestBody(required = false) kind: Int,
+        @RequestBody(required = false) state: Int,
+        @RequestBody(required = false) location: Int,
         @PageableDefault pageable: Pageable
     ): ResponseEntity<Any> {
-        return response(performanceService.findAllByGenrenmAndStateAndLocation(kind, state, location, pageable))
+        return response(performanceService.findAllJoinFetch(kind, state, location, pageable))
     }
-
- */
-
 
     @GetMapping("/{performId}", produces = ["application/json"])
     @ApiOperation(value="공연 상세 조회", notes = "공연 상세 조회 by 공연 ID")
