@@ -30,15 +30,32 @@ class PerformanceService(
         state: Int,
         location: Int,
         pageable: Pageable
-    ): PerformanceDetailListResponse{
+    ): PerformanceListResponse{
 
-        val performanceDetailList: MutableList<PerformanceEntityResponse> =
-            performanceDetailRepository.findAllJoinAll(kind, state, location, pageable).content
+        val result = performanceDetailRepository.findAllJoinAll(kind, state, location, pageable)
 
-        val totalCount: Long = performanceDetailRepository.findAllJoinAll(kind,state,location,pageable).totalElements
-        val totalPages: Int = performanceDetailRepository.findAllJoinAll(kind,state,location,pageable).totalPages
+        val performanceDetailList: MutableList<PerformanceEntityResponse> = result.content
+        val totalCount: Long = result.totalElements
+        val totalPages: Int = result.totalPages
 
-        return PerformanceDetailListResponse.of(performanceDetailList, totalCount, totalPages)
+        return PerformanceListResponse.of(performanceDetailList, totalCount, totalPages)
+    }
+
+    /**
+     * @title 공연명 검색 공연 목록
+     * @param Pageable, keyword
+     * @return PerformanceDetailListResponse() -> totalCount, totalPage, list
+     */
+    fun findByKeywordAll(
+        keyword: String,
+        pageable: Pageable
+    ): PerformanceListResponse{
+        val result = performanceDetailRepository.findByKeywordAll(keyword,pageable)
+        val performanceDetailList: MutableList<PerformanceEntityResponse> = result.content
+        val totalCount: Long = result.totalElements
+        val totalPages: Int = result.totalPages
+
+        return PerformanceListResponse.of(performanceDetailList, totalCount, totalPages)
     }
 
     /**

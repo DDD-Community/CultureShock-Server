@@ -1,16 +1,15 @@
 package com.cultureshock.madeleine.rest.controller
 
-import com.cultureshock.madeleine.config.security.LoginUser
 import com.cultureshock.madeleine.rest.RestSupport
 import com.cultureshock.madeleine.rest.dto.request.PerformanceListRequest
+import com.cultureshock.madeleine.rest.dto.request.PerformanceSearchRequest
 import com.cultureshock.madeleine.service.performance.PerformanceService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import okhttp3.Response
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @Api(tags = ["공연"])
@@ -28,6 +27,16 @@ class PerformanceController(
         val paging: Pageable = PageRequest.of(performanceListRequest?.page?: 0,performanceListRequest?.size?: 10)
         return response(performanceService.findAllJoinFetch(performanceListRequest?.kind?: 0,
             performanceListRequest?.state?: 0, performanceListRequest?.location?: 0, paging))
+    }
+
+    @PostMapping("/search")
+    @ApiOperation(value="공연 목록 검색", notes = "타이틀 검색")
+    fun getAllBykeyword(
+        @RequestBody(required = false) performanceSearchRequest: PerformanceSearchRequest?
+    ): ResponseEntity<Any>{
+        val paging: Pageable = PageRequest.of(performanceSearchRequest?.page?: 0,performanceSearchRequest?.size?: 10)
+        return response(performanceService.findByKeywordAll(performanceSearchRequest?.keyword?:"", paging))
+
     }
 
     @GetMapping("/{performId}", produces = ["application/json"])

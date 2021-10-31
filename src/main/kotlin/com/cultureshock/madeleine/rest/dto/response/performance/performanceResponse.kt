@@ -33,34 +33,34 @@ data class PerformanceResponse (
         }
     }
 }
-
-data class PerformanceListResponse (
+data class PerformanceDetailListResponse (
     val totalCount: Long,
     val totalPages: Int,
-    val performanceList: MutableList<Performance>
+    val performanceList: MutableList<PerformanceDetail>
 ){
     companion object{
-        fun of(performanceList: MutableList<Performance>, totalCount: Long, totalPages: Int ): PerformanceListResponse{
-            return PerformanceListResponse(
+        fun of(performanceDetailList: MutableList<PerformanceDetail>, totalCount: Long, totalPages: Int ): PerformanceDetailListResponse{
+            return PerformanceDetailListResponse(
                 totalCount = totalCount,
                 totalPages = totalPages,
-                performanceList = performanceList
+                performanceList = performanceDetailList
             )
         }
     }
 }
 
-data class PerformanceDetailListResponse (
+
+data class PerformanceListResponse (
     val totalCount: Long,
     val totalPages: Int,
     val performanceList: MutableList<PerformanceEntityResponse>
 ){
     companion object{
-        fun of(performanceDetailList: MutableList<PerformanceEntityResponse>, totalCount: Long, totalPages: Int ): PerformanceDetailListResponse{
-            return PerformanceDetailListResponse(
+        fun of(performanceList: MutableList<PerformanceEntityResponse>, totalCount: Long, totalPages: Int ): PerformanceListResponse{
+            return PerformanceListResponse(
                 totalCount = totalCount,
                 totalPages = totalPages,
-                performanceList = performanceDetailList
+                performanceList = performanceList
             )
         }
     }

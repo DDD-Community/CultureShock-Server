@@ -23,6 +23,11 @@ interface PerformanceDetailRepository: JpaRepository<PerformanceDetail, Long>, C
         @Param("location") hallAddress: Int,
         pageable: Pageable
     ): Page<PerformanceEntityResponse>
+
+    override fun findByKeywordAll(
+        @Param("keyword") keyword: String,
+        pageable: Pageable
+    ): Page<PerformanceEntityResponse>
 }
 
 interface CustomPerformanceDetailRepository{
@@ -30,6 +35,10 @@ interface CustomPerformanceDetailRepository{
         @Param("kind") performKind: Int,
         @Param("state") state: Int,
         @Param("location") hallAddress: Int,
+        pageable: Pageable
+    ): Page<PerformanceEntityResponse>
+    fun findByKeywordAll(
+        @Param("keyword") keyword: String,
         pageable: Pageable
     ): Page<PerformanceEntityResponse>
     fun findByPerformId(performId: String): PerformanceDetail?
@@ -51,8 +60,37 @@ class PerformanceDetailRepositoryImpl(
         performId: String
     ): PerformanceDetail? {
         return query.selectFrom(QPerformanceDetail.performanceDetail)
-            .where(QPerformanceDetail.performanceDetail.performId.eq(performId))
+                .where(QPerformanceDetail.performanceDetail.performId.eq(performId))
             .fetchOne()
+    }
+
+    override fun findByKeywordAll(
+        @Param("keyword") keyword: String,
+        pageable: Pageable
+    ): Page<PerformanceEntityResponse> {
+
+        val result = query.select(
+            Projections.constructor(
+                PerformanceEntityResponse::class.java,
+                perform.performId,
+                perform.performName,
+                perform.performStartDate,
+                perform.performEndDate,
+                perform.hallName,
+                perform.posterUrl,
+                perform.performState,
+                perform.performKind
+            )
+        )
+            .from(perform)
+            .where(QPerformanceDetail.performanceDetail.performName.contains(keyword))
+            .fetch()
+
+        return PageImpl<PerformanceEntityResponse>(
+            result,
+            pageable,
+            result.size.toLong()
+        )
     }
 
     override fun findAllJoinAll(
