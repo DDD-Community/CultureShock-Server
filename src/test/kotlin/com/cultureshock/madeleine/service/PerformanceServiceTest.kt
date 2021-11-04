@@ -2,7 +2,9 @@ package com.cultureshock.madeleine.service
 
 import com.cultureshock.madeleine.domain.performance.*
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceDetailResponse
+import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceListResponse
 import com.cultureshock.madeleine.service.performance.PerformanceService
+import com.cultureshock.madeleine.service.ticket.TicketService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.assertj.core.api.Assertions
@@ -26,13 +28,15 @@ internal class PerformanceServiceTest {
     private lateinit var locationDetailRepository: LocationDetailRepository
 
     private lateinit var performanceService: PerformanceService
+    private lateinit var ticketService: TicketService
 
     @BeforeEach
     internal fun setUp() {
         performanceService = PerformanceService(
             performanceRepository = performanceRepository,
             performanceDetailRepository = performanceDetailRepository,
-            locationDetailRepository = locationDetailRepository
+            locationDetailRepository = locationDetailRepository,
+            ticketService = ticketService
         )
     }
 
@@ -47,7 +51,12 @@ internal class PerformanceServiceTest {
         assertAll(
             { Assertions.assertThat(response.performKind).isEqualTo("오페라") },
             { Assertions.assertThat(response.performRuntime).isEqualTo("1시간 30분") },
-            { Assertions.assertThat(response.locationDetailResponse?.hallAddres).isEqualTo("서울특별시 송파구 위례성대로 18 금복빌딩 B1층 아트홀제이") }
         )
+    }
+
+    @Test
+    fun `공연 목록을 불러온다`(){
+
+
     }
 }

@@ -13,12 +13,14 @@ import org.springframework.stereotype.Repository
 import java.util.*
 import javax.annotation.Resource
 
-@Repository
 interface TicketRepository : JpaRepository<Ticket, Long>, CustomTicketRepository{
 }
 
 interface CustomTicketRepository{
     fun findByTicketId(ticketId: Long): Ticket?
+    fun findByPerformId(
+        perforId: String
+    ): List<Ticket>
     fun findAllByUserId(
         userId: Long,
         pageable: Pageable
@@ -43,6 +45,13 @@ class TicketRepositoryImpl(
             .where(ticket.ticketId.eq(ticketId)).fetchOne()
     }
 
+    override fun findByPerformId(
+        performId: String
+    ): List<Ticket>{
+        return query.selectFrom(ticket)
+            .where(ticket.performId.eq(performId)).fetch()
+    }
+
     override fun findAllByUserId(
         userId: Long,
         pageable: Pageable
@@ -53,7 +62,7 @@ class TicketRepositoryImpl(
                     ticket.ticketId,
                     ticket.title,
                     ticket.companyName,
-                    ticket.date,
+                    ticket.regDate,
                     ticket.price,
                     ticket.place,
                     ticket.seat,

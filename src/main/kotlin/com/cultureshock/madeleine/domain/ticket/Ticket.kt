@@ -2,20 +2,20 @@ package com.cultureshock.madeleine.domain.ticket
 
 import com.cultureshock.madeleine.domain.AbstractBaseAuditEntity
 import com.cultureshock.madeleine.domain.user.Authority
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name="ticket")
 class Ticket(
     @Id
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val ticketId: Long? = null,
 
     @Column(nullable = false)
     val userId:Long,
+
+    @Column(nullable = false)
+    val performId: String,
 
     @Column(nullable = false)
     val nickName: String,
@@ -25,11 +25,15 @@ class Ticket(
 
     val companyName: String? = null,
 
-    val date: Int,
+    val regDate: Int,
 
+    @Column(name = "ticketPrice")
     val price: Int = 0,
+    @Column(name = "ticketPlace")
     val place: String? = null,
+    @Column(name = "ticketSeat")
     val seat: String? = null,
+    @Column(name = "ticketCast")
     val cast: String? = null,
 
     val stagePoint: Int = 0,
@@ -37,6 +41,7 @@ class Ticket(
     val actorPoint: Int = 0,
     val trafficPoint: Int = 0,
     val seatPoint: Int = 0,
+    val reviewPoint: Int = 0,
 
     val picture1: String? = null,
     val picture2: String? = null,
@@ -44,7 +49,9 @@ class Ticket(
     val picture4: String? = null,
     val picture5: String? = null,
 
+    @Column(name = "ticketReview")
     val review: String? = null,
+    @Column(name = "ticketLike")
     val like: Int = 0,
     val pointAvg: Double = 0.0
 

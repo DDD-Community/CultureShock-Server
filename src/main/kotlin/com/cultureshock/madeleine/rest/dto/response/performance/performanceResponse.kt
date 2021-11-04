@@ -3,6 +3,7 @@ package com.cultureshock.madeleine.rest.dto.response.performance
 import com.cultureshock.madeleine.domain.performance.LocationDetail
 import com.cultureshock.madeleine.domain.performance.Performance
 import com.cultureshock.madeleine.domain.performance.PerformanceDetail
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketPointAvgResponse
 import java.time.LocalDate
 import java.util.*
 
@@ -69,46 +70,59 @@ data class PerformanceListResponse (
 data class PerformanceDetailResponse (
     val id: Long, //seq
     val performId: String,      //공연ID
-    val hallId: String,      //공연시설ID
     val performName: String,       //공연명
+    var enterName: String?,   //제작사
     val performStartDate: Date,     //공연시작일
     val performEndDate: Date,       //공연종료일
     val hallName: String?,    //공연시설명(공연장명)
+    val hallLocationX: Double?,
+    val hallLocationY: Double?,
+    val hallUrl: String?,
     val performCast: String?,    //공연출연진
-    val performCrew: String?,    //공연제작진
     val performRuntime: String?, //공연런타임
-    var performAge: String,//공연 관람 연령
-    var enterName: String?,   //제작사
     var price: String,//티켓가격
-    val posterUrl: String,      //포스터 이미지 경로
     val performKind: String?,     //장르
     var performState: String?,    //공연상태
+    val posterUrl: String,      //포스터 이미지 경로
     val performPhotoUrl : List<String?>,
-    var performTime: String?,   //공연시간
-    var locationDetailResponse: LocationDetailResponse?             //경도
+    val performTime: String?,   //공연시간
+
+    val stagePointAvg: Double,
+    val storyPointAvg: Double,
+    val actorPointAvg: Double,
+    val trafficPointAvg: Double,
+    val seatPointAvg: Double,
+    val reviewPointAvg: Double,
+    val reviewCnt: Int
 ) {
     companion object {
-        fun of(performanceDetail: PerformanceDetail, locationDetail: LocationDetail?): PerformanceDetailResponse {
+        fun of(performanceDetail: PerformanceDetail, locationDetail: LocationDetail?, pointAvg: TicketPointAvgResponse): PerformanceDetailResponse {
             return PerformanceDetailResponse(
                 id = performanceDetail.pid,
                 performId = performanceDetail.performId,
                 performKind = performanceDetail.performKind,
-                hallId = performanceDetail.hallId,
                 performName = performanceDetail.performName,
                 performStartDate = performanceDetail.performStartDate,
                 performEndDate = performanceDetail.performEndDate,
                 hallName = performanceDetail.hallName,
                 performCast = performanceDetail.performCast,
-                performCrew = performanceDetail.performCrew,
                 performRuntime = performanceDetail.performRuntime,
-                performAge = performanceDetail.performAge,
                 enterName = performanceDetail.enterName,
                 price = performanceDetail.price,
                 posterUrl = performanceDetail.posterUrl,
                 performState = performanceDetail.performState,
                 performPhotoUrl = listOf(performanceDetail.performPhotoUrl1,performanceDetail.performPhotoUrl2,performanceDetail.performPhotoUrl3,performanceDetail.performPhotoUrl4),
                 performTime = performanceDetail.performTime,
-                locationDetailResponse = locationDetail?.let { LocationDetailResponse.of(it) }
+                hallUrl = locationDetail!!.hallUrl,
+                hallLocationX = locationDetail!!.la,
+                hallLocationY = locationDetail!!.lo,
+                actorPointAvg = pointAvg.actorPointAvg,
+                reviewPointAvg = pointAvg.reviewPointAvg,
+                seatPointAvg = pointAvg.seatPointAvg,
+                stagePointAvg = pointAvg.stagePointAvg,
+                storyPointAvg = pointAvg.storyPointAvg,
+                trafficPointAvg = pointAvg.trafficPointAvg,
+                reviewCnt = pointAvg.reviewCnt
             )
         }
     }

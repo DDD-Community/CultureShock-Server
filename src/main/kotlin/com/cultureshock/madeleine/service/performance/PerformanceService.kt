@@ -3,6 +3,8 @@ package com.cultureshock.madeleine.service.performance
 import com.cultureshock.madeleine.domain.performance.*
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
 import com.cultureshock.madeleine.rest.dto.response.performance.*
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketPointAvgResponse
+import com.cultureshock.madeleine.service.ticket.TicketService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody
 class PerformanceService(
     private val performanceRepository: PerformanceRepository,
     private val performanceDetailRepository: PerformanceDetailRepository,
-    private val locationDetailRepository: LocationDetailRepository
+    private val locationDetailRepository: LocationDetailRepository,
+    private val ticketService: TicketService
 ) {
     /**
      * @title 공연상태 & 지역 & 공연 종류 로 매핑된 공연 목록
@@ -69,7 +72,10 @@ class PerformanceService(
     ): PerformanceDetailResponse {
         val performance = performanceDetailRepository.findByPerformId(performId)?:throw ArguExistPerformanceException()
         val location = locationDetailRepository.findByHallId(performance.hallId)
-        return PerformanceDetailResponse.of(performance, location)
+        // point mapping
+        val pointAvg: TicketPointAvgResponse = ticketService.findByPerformId(performId)
+
+        return PerformanceDetailResponse.of(performance, location, pointAvg)
     }
 
     /**

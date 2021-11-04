@@ -13,7 +13,7 @@ data class TicketDetailResponse (
 
     val companyName: String?,
 
-    val date: Int,
+    val regDate: Int,
 
     val price: Int,
     val place: String?,
@@ -41,7 +41,7 @@ data class TicketDetailResponse (
 
                 companyName = ticket.companyName,
 
-                date = ticket.date,
+                regDate = ticket.regDate,
 
                 price = ticket.price,
                 place = ticket.place,
@@ -87,4 +87,13 @@ data class TicketEntityResponse(
     val place: String?,
     val seat: String?,
     val pointAvg: Double
+)
+data class TicketPointAvgResponse(
+    var actorPointAvg: Double,
+    var reviewPointAvg: Double,
+    var seatPointAvg: Double,
+    var stagePointAvg: Double,
+    var storyPointAvg: Double,
+    var trafficPointAvg: Double,
+    var reviewCnt: Int
 )
