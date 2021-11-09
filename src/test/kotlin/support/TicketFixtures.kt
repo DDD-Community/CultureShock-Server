@@ -1,6 +1,27 @@
 package support
 
 import com.cultureshock.madeleine.domain.ticket.Ticket
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketPointAvgResponse
+
+fun createTicketPointAvgResponse(
+    actorPointAvg: Double = 4.0,
+    reviewPointAvg: Double = 1.0,
+    seatPointAvg: Double = 4.0,
+    stagePointAvg: Double = 3.0,
+    storyPointAvg: Double = 2.0,
+    trafficPointAvg: Double = 2.0,
+    reviewCnt: Int = 1
+): TicketPointAvgResponse {
+    return TicketPointAvgResponse(
+        actorPointAvg = actorPointAvg,
+        reviewPointAvg = reviewPointAvg,
+        seatPointAvg = seatPointAvg,
+        stagePointAvg = stagePointAvg,
+        storyPointAvg = storyPointAvg,
+        trafficPointAvg = trafficPointAvg,
+        reviewCnt = reviewCnt
+    )
+}
 
 fun createTickets(
     ticket1: Ticket = Ticket(
@@ -30,7 +51,7 @@ fun createTickets(
         like = 0,
     ),
     ticket2: Ticket = Ticket(
-        ticketId = 2,
+        ticketId = 2L,
         userId = 2,
         performId = "PF181298",
         nickName =  "철수2",
@@ -57,7 +78,7 @@ fun createTickets(
 
     ),
     ticket3: Ticket = Ticket(
-        ticketId = 3,
+        ticketId = 3L,
         userId = 2,
         performId = "PF181298",
         nickName =  "철수3",
@@ -85,3 +106,4 @@ fun createTickets(
 ): List<Ticket> {
     return listOf<Ticket>(ticket1, ticket2, ticket3)
 }
+

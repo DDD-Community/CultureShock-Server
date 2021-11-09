@@ -28,13 +28,13 @@ class TicketRepositoryTest @Autowired constructor(
     }
 
     @AfterEach
-    internal fun setDown(){
+    internal fun setDown() {
         ticketRepository.deleteAll()
     }
 
     @Test
     fun `티켓id 매핑 티켓을 가져온다`() {
-        val ticketEx: Ticket? = ticketRepository.findByTicketId(1L)
+        val ticketEx: Ticket? = ticketRepository.findByTicketId(4L)
 
         assertAll(
             { Assertions.assertThat(ticketEx!!.review).isEqualTo("리뷰입니다1") },

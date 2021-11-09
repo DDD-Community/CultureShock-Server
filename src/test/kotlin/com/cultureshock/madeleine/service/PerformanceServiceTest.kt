@@ -28,6 +28,8 @@ internal class PerformanceServiceTest {
     private lateinit var locationDetailRepository: LocationDetailRepository
 
     private lateinit var performanceService: PerformanceService
+
+    @MockK
     private lateinit var ticketService: TicketService
 
     @BeforeEach
@@ -45,6 +47,7 @@ internal class PerformanceServiceTest {
         //when
         every{ performanceDetailRepository.findByPerformId(any())} answers { createPerformanceDetails()[2] }
         every{ locationDetailRepository.findByHallId(any())} answers { createLocationDetail()[2] }
+        every{ ticketService.findByPerformId(any()) } answers { createTicketPointAvgResponse() }
         val response : PerformanceDetailResponse = performanceService.findByPerformId("FC001808")
 
         //then
