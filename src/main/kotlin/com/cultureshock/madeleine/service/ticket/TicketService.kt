@@ -4,12 +4,11 @@ import com.cultureshock.madeleine.domain.ticket.CustomTicketRepository
 import com.cultureshock.madeleine.domain.ticket.Ticket
 import com.cultureshock.madeleine.domain.ticket.TicketRepository
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
+import com.cultureshock.madeleine.exception.ArguExistTicketException
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceDetailResponse
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceListResponse
-import com.cultureshock.madeleine.rest.dto.response.ticket.TicketDetailResponse
-import com.cultureshock.madeleine.rest.dto.response.ticket.TicketEntityResponse
-import com.cultureshock.madeleine.rest.dto.response.ticket.TicketListResponse
-import com.cultureshock.madeleine.rest.dto.response.ticket.TicketPointAvgResponse
+import com.cultureshock.madeleine.rest.dto.response.ticket.*
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -53,6 +52,13 @@ class TicketService(
         return pointAvg
     }
 
+    /**
+     * @title 티켓 Top 10 리스트
+     * @return TicketListResponse()
+     */
+    fun findAllByLike(): MutableList<TicketTopEntityResponse?>{
+        return ticketRepository.findAllByLike(pageable = PageRequest.of(0, 10)).content
+    }
 
     /**
      * @title 티켓 상세
@@ -63,7 +69,7 @@ class TicketService(
     fun findByTicketId(
         ticketId:Long
     ): TicketDetailResponse{
-        val ticket = ticketRepository.findByTicketId(ticketId)?:throw ArguExistPerformanceException()
+        val ticket = ticketRepository.findByTicketId(ticketId)?:throw ArguExistTicketException()
         return TicketDetailResponse.of(ticket)
     }
 

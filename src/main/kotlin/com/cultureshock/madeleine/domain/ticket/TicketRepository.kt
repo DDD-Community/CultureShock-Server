@@ -2,6 +2,7 @@ package com.cultureshock.madeleine.domain.ticket
 
 
 import com.cultureshock.madeleine.rest.dto.response.ticket.TicketEntityResponse
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketTopEntityResponse
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
@@ -25,6 +26,9 @@ interface CustomTicketRepository{
         userId: Long,
         pageable: Pageable
     ): Page<TicketEntityResponse?>
+    fun findAllByLike(
+        pageable: Pageable
+    ): Page<TicketTopEntityResponse?>
 }
 
 /**
@@ -38,6 +42,32 @@ class TicketRepositoryImpl(
 
     private val ticket : QTicket = QTicket.ticket
 
+    override fun findAllByLike(
+        pageable: Pageable
+    ): Page<TicketTopEntityResponse?> {
+        val result = query.select(
+            Projections.constructor(
+                TicketTopEntityResponse::class.java,
+                ticket.ticketId,
+                ticket.nickName,
+                ticket.title,
+                ticket.companyName,
+                ticket.regDate,
+                ticket.price,
+                ticket.place,
+                ticket.seat,
+                ticket.pointAvg,
+                ticket.like
+            )
+        ).from(ticket)
+            .orderBy(ticket.like.desc()).fetch()
+
+        return PageImpl<TicketTopEntityResponse>(
+            result,
+            pageable,
+            result.size.toLong()
+        )
+    }
     override fun findByTicketId(
         ticketId: Long
     ): Ticket? {

@@ -24,9 +24,14 @@ class TicketController(
         @RequestBody ticketMyListRequest: TicketMyListRequest?
     ): ResponseEntity<Any> {
         val paging: Pageable = PageRequest.of(ticketMyListRequest?.page?: 0,ticketMyListRequest?.size?: 10)
-        return response(ticketService.findAllByUserId(ticketMyListRequest?.userId?: 0,  paging))
+        return response(ticketService.findAllByUserId(ticketMyListRequest?.userid?: 0, paging))
     }
 
+    @GetMapping("/top/list", produces = ["application/json"])
+    @ApiOperation(value="좋아요 Top 10 목록 리스트", notes = "탑 10 리스트 조회")
+    fun getTop10List(): ResponseEntity<Any>{
+        return response(ticketService.findAllByLike());
+    }
 
     @GetMapping("/{ticketId}", produces = ["application/json"])
     @ApiOperation(value="티켓 상세 조회", notes = "티켓 상세 조회 by 티켓 ID")

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
 data class TicketMyListRequest(
-    val userId: Long = 0,
+    val userid:Long = 0,
     val size: Int? = 10,
     val page: Int? = 0
 )

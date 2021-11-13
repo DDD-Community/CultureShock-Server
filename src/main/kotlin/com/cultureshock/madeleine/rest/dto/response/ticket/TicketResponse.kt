@@ -4,7 +4,6 @@ import com.cultureshock.madeleine.domain.ticket.Ticket
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceEntityResponse
 import java.util.*
 
-
 data class TicketDetailResponse (
     val ticketId: Long?,
     val userId:Long,
@@ -82,11 +81,24 @@ data class TicketEntityResponse(
     val ticketId: Long,
     val title: String,
     val companyName: String?,
-    val date: Int,
+    val regDate: Int,
     val price: Int,
     val place: String?,
     val seat: String?,
     val pointAvg: Double
+)
+
+data class TicketTopEntityResponse(
+    val ticketId: Long,
+    val nickName: String,
+    val title: String,
+    val companyName: String?,
+    val regDate: Int,
+    val price: Int,
+    val place: String?,
+    val seat: String?,
+    val pointAvg: Double,
+    val like: Int
 )
 data class TicketPointAvgResponse(
     var actorPointAvg: Double,
