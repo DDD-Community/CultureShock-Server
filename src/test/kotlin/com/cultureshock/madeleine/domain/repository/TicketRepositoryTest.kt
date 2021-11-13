@@ -3,6 +3,7 @@ package com.cultureshock.madeleine.domain.repository
 import com.cultureshock.madeleine.domain.ticket.Ticket
 import com.cultureshock.madeleine.domain.ticket.TicketRepository
 import com.cultureshock.madeleine.rest.dto.response.ticket.TicketEntityResponse
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketTopEntityResponse
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -54,6 +55,19 @@ class TicketRepositoryTest @Autowired constructor(
             { Assertions.assertThat(ticketEx[0]!!.companyName).isEqualTo("혜화2극장") },
             { Assertions.assertThat(ticketEx[0]!!.title).isEqualTo("이터널스") },
             { Assertions.assertThat(ticketEx[1]!!.title).isEqualTo("오페라의유령") }
+        )
+    }
+
+    @Test
+    fun `top10 매핑 티켓 리스트를 가져온다`() {
+        val pageable: Pageable = PageRequest.of(0, 10)
+        val ticketEx: MutableList<TicketTopEntityResponse?> = ticketRepository.findAllByLike(pageable).content
+
+        assertAll(
+            { Assertions.assertThat(ticketEx!!.size).isEqualTo(3) },
+            { Assertions.assertThat(ticketEx[0]!!.ticketId).isEqualTo(2) },
+            { Assertions.assertThat(ticketEx[1]!!.ticketId).isEqualTo(3) },
+            { Assertions.assertThat(ticketEx[2]!!.ticketId).isEqualTo(1) },
         )
     }
 

@@ -1,7 +1,9 @@
 package support
 
 import com.cultureshock.madeleine.domain.ticket.Ticket
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketEntityResponse
 import com.cultureshock.madeleine.rest.dto.response.ticket.TicketPointAvgResponse
+import com.cultureshock.madeleine.rest.dto.response.ticket.TicketTopEntityResponse
 
 fun createTicketPointAvgResponse(
     actorPointAvg: Double = 4.0,
@@ -22,7 +24,59 @@ fun createTicketPointAvgResponse(
         reviewCnt = reviewCnt
     )
 }
+fun createTicketEntityResponse(
+    ticketEntityResponse1: TicketEntityResponse = TicketEntityResponse(
+        ticketId = 1,
+        title = "제목1",
+        companyName= "기획사1",
+        regDate = 123,
+        price = 10000,
+        place = "장소1",
+        seat = "14F",
+        pointAvg = 3.5
+    ),
+    ticketEntityResponse2: TicketEntityResponse = TicketEntityResponse(
+        ticketId = 2,
+        title = "제목2",
+        companyName= "기획사2",
+        regDate = 123,
+        price = 10000,
+        place = "장소2",
+        seat = "14F2",
+        pointAvg = 4.0
+    )
+): List<TicketEntityResponse?>{
+    return listOf<TicketEntityResponse?>(ticketEntityResponse1, ticketEntityResponse2)
+}
 
+fun createTicketTopEntityResponse(
+    ticketTopEntityResponse1: TicketTopEntityResponse = TicketTopEntityResponse(
+        ticketId = 1,
+        nickName = "닉네임1",
+        title= "티켓1",
+        companyName = "회사1",
+        regDate = 12313123,
+        price = 12000,
+        place = "장소1",
+        seat = "13F",
+        pointAvg = 3.2,
+        like = 321
+    ),
+    ticketTopEntityResponse2: TicketTopEntityResponse = TicketTopEntityResponse(
+        ticketId = 2,
+        nickName = "닉네임2",
+        title= "티켓2",
+        companyName = "회사2",
+        regDate = 12313123,
+        price = 22000,
+        place = "장소2",
+        seat = "13F",
+        pointAvg = 4.2,
+        like = 123
+    ),
+): List<TicketTopEntityResponse> {
+    return listOf<TicketTopEntityResponse>(ticketTopEntityResponse1, ticketTopEntityResponse2)
+}
 fun createTickets(
     ticket1: Ticket = Ticket(
         ticketId = 1L,
@@ -48,7 +102,7 @@ fun createTickets(
         picture4 = "www.test04.com",
         picture5 = "www.test05.com",
         review = "리뷰입니다1",
-        like = 0,
+        like = 10,
     ),
     ticket2: Ticket = Ticket(
         ticketId = 2L,
@@ -74,7 +128,7 @@ fun createTickets(
         picture4 = "www.test04.com",
         picture5 = "www.test05.com",
         review = "리뷰입니다1",
-        like = 0,
+        like = 30,
 
     ),
     ticket3: Ticket = Ticket(
@@ -101,9 +155,10 @@ fun createTickets(
         picture4 = "www.test04.com",
         picture5 = "www.test05.com",
         review = "리뷰입니다1",
-        like = 0
+        like = 20
     ),
 ): List<Ticket> {
     return listOf<Ticket>(ticket1, ticket2, ticket3)
 }
+
 

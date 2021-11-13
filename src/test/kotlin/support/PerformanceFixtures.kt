@@ -3,8 +3,36 @@ package support
 import com.cultureshock.madeleine.domain.performance.LocationDetail
 import com.cultureshock.madeleine.domain.performance.Performance
 import com.cultureshock.madeleine.domain.performance.PerformanceDetail
+import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceEntityResponse
 import java.time.LocalDate
 import java.util.*
+
+fun createPerformanceEntityResponse(
+    performanceEntityResponse1: PerformanceEntityResponse = PerformanceEntityResponse(
+        performId = "MF123",
+        performName = "공연1",
+        performStartDate = Date(2016,6,23),
+        performEndDate = Date(2016,8,28),
+        hallName = "샘터파랑새극장",
+        posterUrl = "http://www.kopis.or.kr/upload/pfmPoster/PF_PF131819_160607_152247.jpg",
+        performState = "공연중",
+        performKind = "뮤지컬"
+    ),
+    performanceEntityResponse2: PerformanceEntityResponse = PerformanceEntityResponse(
+        performId = "QF123",
+        performName = "공연2",
+        performStartDate = Date(2016,6,23),
+        performEndDate = Date(2016,8,28),
+        hallName = "샘터파랑새극장2",
+        posterUrl = "http://www.kopis.or.kr/upload/pfmPoster/PF_PF131819_160607_152247.jpg",
+        performState = "공연예정",
+        performKind = "연극"
+    ),
+): List<PerformanceEntityResponse>{
+    return listOf(performanceEntityResponse1,performanceEntityResponse2)
+}
+
+
 
 fun createPerformances(
     performance1: Performance = Performance(
