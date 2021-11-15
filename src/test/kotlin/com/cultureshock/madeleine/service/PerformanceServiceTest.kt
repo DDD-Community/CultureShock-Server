@@ -71,7 +71,7 @@ internal class PerformanceServiceTest {
             { Assertions.assertThat(response.totalPages).isEqualTo(1) },
             { Assertions.assertThat(response.totalCount).isEqualTo(2) },
             { Assertions.assertThat(response.performanceList[0]!!.performName).isEqualTo("공연1") },
-            { Assertions.assertThat(response.performanceList[0]!!.performName).isEqualTo("공연2") },
+            { Assertions.assertThat(response.performanceList[1]!!.performName).isEqualTo("공연2") },
         )
     }
 
@@ -82,14 +82,14 @@ internal class PerformanceServiceTest {
         every { performanceDetailRepository.findByKeywordAll(any(),any()).content } answers { listOf(createPerformanceEntityResponse()[1]) }
         every { performanceDetailRepository.findByKeywordAll( any(),any()).totalPages } answers { 1 }
         every { performanceDetailRepository.findByKeywordAll(any(),any()).totalElements } answers { 2 }
-        val response_1: PerformanceListResponse = performanceService.findByKeywordAll("예시1",pageable = PageRequest.of(0, 10));
-        val response_2: PerformanceListResponse = performanceService.findByKeywordAll("예시2",pageable = PageRequest.of(0, 10));
+        val response: PerformanceListResponse = performanceService.findByKeywordAll("예시1",pageable = PageRequest.of(0, 10));
 
         //then
         assertAll(
-            { Assertions.assertThat(response_1.totalPages).isEqualTo(1) },
-            { Assertions.assertThat(response_1.totalCount).isEqualTo(2) },
-
+            { Assertions.assertThat(response.totalPages).isEqualTo(1) },
+            { Assertions.assertThat(response.totalCount).isEqualTo(2) },
+            { Assertions.assertThat(response.performanceList[0].performId).isEqualTo("QF123") },
+            { Assertions.assertThat(response.performanceList[0].performName).isEqualTo("공연2") },
         )
     }
 }

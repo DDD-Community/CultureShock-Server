@@ -35,7 +35,7 @@ class TicketRepositoryTest @Autowired constructor(
 
     @Test
     fun `티켓id 매핑 티켓을 가져온다`() {
-        val ticketEx: Ticket? = ticketRepository.findByTicketId(4L)
+        val ticketEx: Ticket? = ticketRepository.findByTicketId(7L)
 
         assertAll(
             { Assertions.assertThat(ticketEx!!.review).isEqualTo("리뷰입니다1") },
