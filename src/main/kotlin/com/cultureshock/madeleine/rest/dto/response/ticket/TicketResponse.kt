@@ -19,11 +19,12 @@ data class TicketDetailResponse (
     val seat: String?,
     val cast: String?,
 
-    val stagePoint: Int,
-    val storyPoint: Int,
-    val actorPoint: Int,
-    val trafficPoint: Int,
-    val seatPoint: Int,
+    val stagePoint: Double,
+    val storyPoint: Double,
+    val actorPoint: Double,
+    val trafficPoint: Double,
+    val seatPoint: Double,
+    val reviewPoint: Double,
 
     val performPhotoUrl: List<String?>,
 
@@ -52,6 +53,7 @@ data class TicketDetailResponse (
                 actorPoint = ticket.actorPoint,
                 trafficPoint = ticket.trafficPoint,
                 seatPoint = ticket.seatPoint,
+                reviewPoint = ticket.reviewPoint,
 
                 performPhotoUrl = listOf(ticket.picture1,ticket.picture2,ticket.picture3,ticket.picture4,ticket.picture5),
                 review = ticket.review,

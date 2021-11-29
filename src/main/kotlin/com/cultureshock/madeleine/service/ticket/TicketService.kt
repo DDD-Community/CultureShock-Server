@@ -5,6 +5,7 @@ import com.cultureshock.madeleine.domain.ticket.Ticket
 import com.cultureshock.madeleine.domain.ticket.TicketRepository
 import com.cultureshock.madeleine.exception.ArguExistPerformanceException
 import com.cultureshock.madeleine.exception.ArguExistTicketException
+import com.cultureshock.madeleine.rest.dto.request.TicketRegisRequest
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceDetailResponse
 import com.cultureshock.madeleine.rest.dto.response.performance.PerformanceListResponse
 import com.cultureshock.madeleine.rest.dto.response.ticket.*
@@ -18,6 +19,19 @@ import org.springframework.transaction.annotation.Transactional
 class TicketService(
     private val ticketRepository: TicketRepository
 ) {
+    /**
+     * @title 티켓 등록
+     * @param TicketRegitRequest
+     * @return ok()
+     * @exception ArguExistPerformanceException(400,"매칭되는 ID가 없습니다")
+     */
+    fun save(
+        ticketRegisRequest: TicketRegisRequest
+    ){
+        val ticket: Ticket = ticketRegisRequest.of(ticketRegisRequest)
+        ticketRepository.save(ticket);
+    }
+
     /**
      * @title 공연별 티켓 목록
      * @param performId :Long 공연ID

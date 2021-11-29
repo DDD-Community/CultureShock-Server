@@ -14,18 +14,23 @@ class Ticket(
     @Column(nullable = false)
     val userId:Long,
 
-    @Column(nullable = false)
-    val performId: String,
+    @Column
+    val content: String = "",
 
-    @Column(nullable = false)
-    val nickName: String,
+    @Column
+    val performId: String = "",
+
+    @Column
+    val nickName: String = "",
 
     @Column(nullable = false)
     val title: String, //공연종류
 
-    val companyName: String? = null,
+    @Column
+    val companyName: String = "",
 
-    val regDate: Int,
+    @Column
+    val regDate: Int = 0,
 
     @Column(name = "ticketPrice")
     val price: Int = 0,
@@ -36,12 +41,12 @@ class Ticket(
     @Column(name = "ticketCast")
     val cast: String? = null,
 
-    val stagePoint: Int = 0,
-    val storyPoint: Int = 0,
-    val actorPoint: Int = 0,
-    val trafficPoint: Int = 0,
-    val seatPoint: Int = 0,
-    val reviewPoint: Int = 0,
+    val stagePoint: Double = 0.0,
+    val storyPoint: Double = 0.0,
+    val actorPoint: Double = 0.0,
+    val trafficPoint: Double = 0.0,
+    val seatPoint: Double = 0.0,
+    val reviewPoint: Double = 0.0,
 
     val picture1: String? = null,
     val picture2: String? = null,

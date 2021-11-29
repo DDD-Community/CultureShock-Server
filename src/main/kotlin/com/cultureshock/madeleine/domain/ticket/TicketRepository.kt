@@ -1,6 +1,7 @@
 package com.cultureshock.madeleine.domain.ticket
 
 
+import com.cultureshock.madeleine.rest.dto.request.TicketRegisRequest
 import com.cultureshock.madeleine.rest.dto.response.ticket.TicketEntityResponse
 import com.cultureshock.madeleine.rest.dto.response.ticket.TicketTopEntityResponse
 import com.querydsl.core.types.Projections
@@ -19,13 +20,16 @@ interface TicketRepository : JpaRepository<Ticket, Long>, CustomTicketRepository
 
 interface CustomTicketRepository{
     fun findByTicketId(ticketId: Long): Ticket?
+
     fun findByPerformId(
         perforId: String
     ): List<Ticket>
+
     fun findAllByUserId(
         userId: Long,
         pageable: Pageable
     ): Page<TicketEntityResponse?>
+
     fun findAllByLike(
         pageable: Pageable
     ): Page<TicketTopEntityResponse?>

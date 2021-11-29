@@ -2,7 +2,7 @@ package com.cultureshock.madeleine.rest.controller
 
 import com.cultureshock.madeleine.rest.RestSupport
 import com.cultureshock.madeleine.rest.dto.request.TicketMyListRequest
-import com.cultureshock.madeleine.service.performance.PerformanceService
+import com.cultureshock.madeleine.rest.dto.request.TicketRegisRequest
 import com.cultureshock.madeleine.service.ticket.TicketService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -39,5 +39,13 @@ class TicketController(
         @PathVariable ticketId: Long
     ): ResponseEntity<Any> {
         return response(ticketService.findByTicketId(ticketId))
+    }
+
+    @PostMapping("/regit")
+    @ApiOperation(value = "내 티켓 등록", notes = "사진 5장 제한")
+    fun reigtTicket(
+        @RequestBody ticketRegisRequest: TicketRegisRequest
+    ): ResponseEntity<Any>{
+        return response(ticketService.save(ticketRegisRequest))
     }
 }
